@@ -1,0 +1,259 @@
+/* 采购单 shop —— 专属样式（共享原子类/页头 .shop-head 见 styles/shared.wxss）。
+   px×2=rpx；1px 细线/虚线保留不放大。暖灰玫瑰一次性装饰色见行内注释。 */
+
+.shop-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(840rpx 600rpx at 100% -3%, #F6E4DF 0%, transparent 60%),
+    var(--cream);
+}
+
+/* ---------- 今晚准备卡 ---------- */
+.tonight {
+  margin: 36rpx 44rpx 0;
+  background: linear-gradient(135deg, #FAEAE5, #F3DCD8); /* 卡背暖玫瑰渐变（一次性装饰色） */
+  border-radius: var(--r-card);
+  padding: 34rpx 34rpx 0;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.tonight .cup {
+  position: absolute;
+  right: -16rpx;
+  bottom: 28rpx;
+  width: 192rpx;
+  height: 192rpx;
+  border-radius: 50%;
+  background: radial-gradient(60% 60% at 50% 40%, #F1C6C1 0%, transparent 62%); /* 装饰光晕（一次性） */
+  opacity: 0.8;
+}
+.tonight .t-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tonight .t-top .t3 {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #7e5f5a; /* 暖灰玫瑰标题（一次性装饰色） */
+}
+.t-dish {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 22rpx 0;
+  position: relative;
+  z-index: 2;
+}
+.t-dish + .t-dish {
+  border-top: 1px solid rgba(180, 130, 120, 0.16); /* 暖色细分隔线（一次性） */
+}
+.t-dish .thumb {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 26rpx;
+  flex: 0 0 auto;
+}
+.t-dish .nm {
+  font-size: 30rpx;
+  font-weight: 500;
+}
+.t-dish .tm {
+  font-size: 23rpx;
+  color: #9a7d77; /* 暖灰玫瑰小字（一次性） */
+  margin-top: 6rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.t-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(180, 130, 120, 0.18); /* 暖色细线（一次性） */
+  margin-top: 10rpx;
+  padding: 26rpx 0;
+  font-size: 24rpx;
+  color: #9a7d77; /* 暖灰玫瑰（一次性） */
+  position: relative;
+  z-index: 2;
+}
+.t-foot .l {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  white-space: nowrap;
+}
+.t-foot .r {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+/* ---------- 她的留言 ---------- */
+.her-msg {
+  margin: 28rpx 44rpx 0;
+  display: flex;
+  gap: 26rpx;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #FBF0EC, #F7E6E2); /* rose-50 → rose-100 渐变 */
+  border: 1px solid var(--rose-100);
+  border-radius: 36rpx;
+  padding: 30rpx 32rpx;
+  box-shadow: var(--shadow-sm);
+}
+.her-msg .hm-ic {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 22rpx;
+  flex: 0 0 auto;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+.her-msg .qt {
+  font-size: 28rpx;
+  color: var(--ink);
+  line-height: 1.65;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+}
+.her-msg .who {
+  font-size: 23rpx;
+  color: var(--rose-700);
+  margin-top: 14rpx;
+  font-weight: 600;
+}
+
+/* ---------- 采购清单 ---------- */
+.list-card {
+  margin: 0 44rpx;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 40rpx;
+  padding: 12rpx 32rpx;
+  box-shadow: var(--shadow-sm);
+}
+.grp-head {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 28rpx 0 12rpx;
+  font-size: 27rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+.grp-head .cv {
+  margin-left: auto;
+}
+.li {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 22rpx 0;
+  border-top: 1px dashed var(--line);
+}
+.grp-head + .li {
+  border-top: none;
+}
+.li .box {
+  width: 42rpx;
+  height: 42rpx;
+  border-radius: 14rpx;
+  border: 3rpx solid var(--rose-300);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+}
+.li.done .box {
+  background: var(--rose-500);
+  border-color: var(--rose-500);
+}
+.li .nm {
+  flex: 1;
+  font-size: 28rpx;
+}
+.li.done .nm {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--rose-300);
+}
+.li .qt {
+  font-size: 25rpx;
+  color: var(--ink-3);
+}
+
+/* ---------- 做饭时间线 ---------- */
+.timeline {
+  display: flex;
+  gap: 16rpx;
+  padding: 4rpx 44rpx;
+}
+.tl {
+  flex: 1;
+  border-radius: 32rpx;
+  padding: 26rpx 22rpx;
+  text-align: center;
+  position: relative;
+}
+/* icon 组件为 display:block，居中并留底部间距（对应原型 .tl svg margin-bottom:5px） */
+.tl .icon {
+  margin: 0 auto 10rpx;
+}
+.tl .tm {
+  font-size: 26rpx;
+  font-weight: 700;
+}
+.tl .nm {
+  font-size: 25rpx;
+  font-weight: 500;
+  margin-top: 10rpx;
+}
+.tl .ds {
+  font-size: 20rpx;
+  margin-top: 6rpx;
+  opacity: 0.75;
+}
+.tl.a {
+  background: var(--sage-100);
+  color: var(--sage-600);
+}
+.tl.b {
+  background: var(--rose-100);
+  color: var(--rose-700);
+}
+.tl.c {
+  background: var(--honey-100);
+  color: var(--honey-600);
+}
+.tl-link {
+  align-self: center;
+  width: 36rpx;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 浮动操作条（tab 页：浮在 tabBar 之上） ---------- */
+.shop-actionbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom) + 116rpx); /* 116rpx ≈ 自定义 tabBar 内容高 */
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx 44rpx;
+  background: linear-gradient(to top, var(--cream) 72%, rgba(250, 245, 238, 0));
+  z-index: 30;
+}
+.shop-share {
+  flex: 1;
+  padding: 30rpx;
+  color: var(--rose-700);
+  border-color: var(--rose-100);
+}

@@ -1,0 +1,35 @@
+/* tokens.wxss —— 设计变量（颜色 / 圆角 / 阴影），全局唯一来源。
+   颜色直接沿用原型 :root；尺寸类变量已按「px×2=rpx」换算。
+   用法：var(--rose-500)。新增颜色统一加在这里，禁止页面里写裸 hex。 */
+page {
+  /* 暖奶油底色面 */
+  --cream: #FAF5EE;
+  --cream-2: #F4ECE1;
+  --surface: #FFFCF8;
+  --line: #EDE3D6;
+
+  /* 灰玫瑰 主色（低饱和） */
+  --rose-700: #B26E6E;
+  --rose-500: #D38C8B;
+  --rose-300: #EBC9C5;
+  --rose-100: #F7E6E2;
+  --rose-50: #FBF0EC;
+
+  /* 鼠尾草绿 次色 */
+  --sage-600: #7E9270;
+  --sage-100: #E9EFE2;
+
+  /* 蜂蜜金 第三色 */
+  --honey-600: #B98F50;
+  --honey-100: #F4EAD4;
+
+  /* 墨色 文字 */
+  --ink: #3E3733;
+  --ink-2: #8B8179;
+  --ink-3: #B7ADA3;
+
+  /* 阴影 & 圆角（已 ×2 → rpx） */
+  --shadow: 0 20rpx 60rpx rgba(180, 140, 118, 0.16);
+  --shadow-sm: 0 12rpx 32rpx rgba(180, 140, 118, 0.12);
+  --r-card: 44rpx;
+}

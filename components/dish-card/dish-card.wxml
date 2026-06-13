@@ -1,0 +1,21 @@
+<!-- dish-card —— 首页「治愈菜单」横滑卡。点卡进详情；+ 加入心愿单；♥ 收藏(本地装饰)。 -->
+<view class="dish" bindtap="onTap">
+  <view class="img">
+    <image class="food" src="{{dish.img}}" mode="aspectFill" />
+    <view class="add {{inWish ? 'in' : ''}} {{pressed ? 'pressed' : ''}}" catchtap="onAdd">
+      <icon name="{{inWish ? 'check' : 'plus'}}" color="{{C.white}}" size="30" />
+    </view>
+    <view class="heart {{saved ? 'on' : ''}}" catchtap="onHeart">
+      <icon name="heart" color="{{saved ? C.white : C.rose500}}" size="30" />
+    </view>
+  </view>
+  <view class="body">
+    <view class="dish-name">{{dish.name}}</view>
+    <view class="tagrow"><text class="chip {{dish.tagType}}">{{dish.tag}}</text></view>
+    <view class="metas">
+      <view class="meta"><icon name="clock" color="{{C.ink2}}" size="28" />{{dish.time}}分钟</view>
+      <view class="dot"></view>
+      <view class="meta">{{dish.difficulty}}</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,19 @@
+/* app.wxss —— 全局样式：设计变量 + 共享原子类 + 页面底色。
+   具体见 /styles/tokens.wxss 与 /styles/shared.wxss。 */
+@import "/styles/tokens.wxss";
+@import "/styles/shared.wxss";
+
+page {
+  font-family: "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+  color: var(--ink);
+  /* 原型 body 的暖色径向渐变底 */
+  background:
+    radial-gradient(1200rpx 1400rpx at 18% 12%, #F6ECE4 0%, transparent 60%),
+    radial-gradient(2000rpx 1600rpx at 85% 88%, #F3E5E2 0%, transparent 55%),
+    #EFE6DB;
+  -webkit-tap-highlight-color: transparent;
+}
+
+view, text, image, scroll-view, button, textarea {
+  box-sizing: border-box;
+}

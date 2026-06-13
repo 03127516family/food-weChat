@@ -1,0 +1,2 @@
+/* 样式全部来自 styles/shared.wxss（.sec-head / .sec-title / .sec-more），
+   经 styleIsolation:'apply-shared' 注入，这里无需重复。 */

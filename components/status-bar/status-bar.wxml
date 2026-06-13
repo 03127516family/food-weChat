@@ -1,0 +1,2 @@
+<!-- status-bar —— 顶部状态栏安全区占位（navigationStyle:custom 下让内容避开系统状态栏） -->
+<view class="status-bar" style="height:{{height}}px;"></view>

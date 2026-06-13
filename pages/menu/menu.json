@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "status-bar": "/components/status-bar/status-bar",
+    "menu-item": "/components/menu-item/menu-item",
+    "wish-bar": "/components/wish-bar/wish-bar"
+  }
+}

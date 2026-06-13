@@ -1,0 +1,55 @@
+/* 我的 mine —— 专属样式（共享原子类见 styles/shared.wxss） */
+.mine-page { min-height: 100vh; background: var(--cream); }
+
+/* ---- 容器（居中） ---- */
+.mine-wrap { padding: 60rpx 44rpx; text-align: center; color: var(--ink-2); }
+
+/* ---- 头像 ---- */
+.mine-av {
+  width: 176rpx; height: 176rpx; border-radius: 50%;
+  margin: 36rpx auto 28rpx;
+  /* 一次性玫瑰渐变头像底（原型 #F0D6CF→#E7C5BD） */
+  background: linear-gradient(150deg, #F0D6CF, #E7C5BD);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ---- 名称 ---- */
+.mine-name {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: 42rpx; color: var(--ink);
+}
+.mine-streak { font-size: 25rpx; color: var(--ink-2); margin-top: 12rpx; }
+.mine-streak .hl { color: var(--rose-700); font-weight: 700; }
+
+/* ---- 统计行 ---- */
+.mine-row { display: flex; justify-content: space-around; margin: 48rpx 0; }
+.mine-row .v {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: 44rpx; font-weight: 700; color: var(--rose-700);
+}
+.mine-row .k { font-size: 23rpx; color: var(--ink-3); margin-top: 8rpx; }
+
+/* ---- 接收提醒按钮（做饭的人授权订阅消息） ---- */
+.mine-subscribe {
+  display: flex; align-items: center; justify-content: center; gap: 14rpx;
+  margin: 0 0 28rpx; padding: 26rpx; border-radius: 40rpx;
+  background: var(--rose-500); color: #fff; font-size: 28rpx; font-weight: 500;
+  box-shadow: 0 16rpx 32rpx rgba(195, 120, 118, 0.3);
+}
+.mine-subscribe.on {
+  background: var(--sage-100); color: var(--sage-600); box-shadow: none;
+}
+
+/* ---- 菜单卡 ---- */
+.mine-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 36rpx; text-align: left; box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.mine-li {
+  display: flex; align-items: center; gap: 26rpx;
+  padding: 30rpx 32rpx; font-size: 29rpx; color: var(--ink);
+}
+.mine-li + .mine-li { border-top: 1px solid var(--line); }
+.mine-li .lb { flex: 1; }
+.mine-li .ar { margin-left: auto; }

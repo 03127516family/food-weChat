@@ -1,0 +1,103 @@
+/* 心愿单 wish —— 专属样式（共享原子类见 shared.wxss） */
+.wish-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(840rpx 640rpx at 100% -4%, #F6E4DF 0%, transparent 62%),
+    var(--cream);
+}
+
+/* ---- 头部 ---- */
+.wish-head { padding: 16rpx 44rpx 0; }
+.wish-h1 { font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 54rpx; }
+.wish-head .sub { font-size: 25rpx; color: var(--ink-2); margin-top: 16rpx; letter-spacing: 0.02em; }
+
+/* ---- 列表 ---- */
+.wish-list { padding: 36rpx 44rpx 4rpx; display: flex; flex-direction: column; gap: 24rpx; }
+.wish-item {
+  display: flex; align-items: center; gap: 26rpx;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 36rpx;
+  padding: 22rpx; box-shadow: var(--shadow-sm); animation: fade 0.35s ease;
+}
+.wish-item .thumb { width: 124rpx; height: 124rpx; border-radius: 28rpx; flex: 0 0 auto; }
+.wi-body { flex: 1; }
+.wi-name { font-size: 31rpx; font-weight: 700; }
+.wish-item .metas { display: flex; align-items: center; gap: 16rpx; margin-top: 16rpx; }
+.wish-item .rm {
+  width: 60rpx; height: 60rpx; border-radius: 50%; background: var(--cream-2);
+  color: var(--ink-3); display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+}
+
+/* ---- 空状态 ---- */
+.wish-empty { padding: 80rpx 60rpx; text-align: center; }
+.wish-empty .ill {
+  width: 192rpx; height: 192rpx; border-radius: 50%; margin: 0 auto 36rpx;
+  background:
+    radial-gradient(60% 60% at 50% 40%, #F4C9C4 0%, transparent 62%),
+    linear-gradient(150deg, #F0D6CF, #E7C5BD);
+  display: flex; align-items: center; justify-content: center;
+}
+.empty-title { font-family: "Noto Serif SC", "Songti SC", serif; font-size: 36rpx; color: var(--ink); }
+.empty-desc { font-size: 25rpx; color: var(--ink-2); margin-top: 16rpx; line-height: 1.7; white-space: pre-line; }
+.wish-empty .go-menu {
+  display: inline-flex; align-items: center; gap: 12rpx; margin-top: 36rpx;
+  background: var(--rose-500); color: #fff; font-size: 27rpx; font-weight: 500;
+  padding: 22rpx 40rpx; border-radius: 48rpx; box-shadow: 0 16rpx 32rpx rgba(195, 120, 118, 0.3);
+}
+
+/* ---- 留言 ---- */
+.msg-block { padding: 12rpx 44rpx 0; }
+.msg-label {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 600; font-size: 30rpx; color: var(--ink);
+  margin: 32rpx 0 22rpx; display: flex; align-items: center; gap: 18rpx;
+}
+.msg-label::before { content: ""; width: 8rpx; height: 30rpx; border-radius: 6rpx; background: var(--rose-500); }
+.msg-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 36rpx;
+  padding: 28rpx 30rpx 20rpx; box-shadow: var(--shadow-sm);
+}
+.msg-input { width: 100%; font-size: 28rpx; line-height: 1.7; color: var(--ink); min-height: 112rpx; }
+.ph-text { color: var(--ink-3); }
+.msg-foot { display: flex; justify-content: flex-end; font-size: 22rpx; color: var(--ink-3); }
+.phrase-row { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 26rpx; }
+.phrase {
+  background: var(--rose-50); color: var(--rose-700); font-size: 24rpx;
+  padding: 16rpx 26rpx; border-radius: 32rpx; border: 1px solid var(--rose-100);
+}
+
+/* ---- 送出按钮 ---- */
+.wish-action { padding-bottom: calc(36rpx + env(safe-area-inset-bottom)); }
+.wish-send { flex: 1; padding: 32rpx; }
+
+/* ---- 送出确认遮罩 ---- */
+.sent-ov {
+  position: fixed; inset: 0; z-index: 80;
+  display: flex; align-items: center; justify-content: center; padding: 60rpx;
+  background: radial-gradient(1040rpx 840rpx at 50% 32%, #F8E7E2 0%, #FAF5EE 60%);
+  opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+.sent-ov.show { opacity: 1; pointer-events: auto; }
+.sent-card { text-align: center; }
+.sent-ov.show .sent-card { animation: rise 0.55s 0.12s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.env {
+  width: 216rpx; height: 216rpx; border-radius: 50%; margin: 0 auto 48rpx; position: relative;
+  background: linear-gradient(150deg, #F0D6CF, #E7C5BD);
+  display: flex; align-items: center; justify-content: center; color: #fff;
+  box-shadow: 0 36rpx 80rpx rgba(195, 120, 118, 0.4);
+}
+.sent-ov.show .env { animation: pop 0.6s cubic-bezier(0.2, 1.4, 0.4, 1); }
+.env .pulse { position: absolute; inset: 0; border-radius: 50%; border: 3rpx solid var(--rose-300); }
+.sent-ov.show .env .pulse { animation: pulse 1.7s ease-out 0.5s infinite; }
+.sent-h2 { font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 46rpx; color: var(--ink); }
+.sent-p { font-size: 26rpx; color: var(--ink-2); line-height: 1.78; margin-top: 24rpx; white-space: pre-line; }
+.mail-tag {
+  display: inline-flex; align-items: center; gap: 12rpx; margin-top: 32rpx;
+  background: var(--surface); border: 1px solid var(--line); color: var(--ink-2);
+  font-size: 23rpx; padding: 14rpx 26rpx; border-radius: 40rpx; box-shadow: var(--shadow-sm);
+}
+.sent-actions { display: flex; flex-direction: column; gap: 22rpx; margin-top: 52rpx; align-items: center; }
+.sent-actions .btn { padding: 30rpx; width: 472rpx; max-width: 100%; }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { transform: translateY(28rpx); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop { 0% { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes pulse { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.55); opacity: 0; } }

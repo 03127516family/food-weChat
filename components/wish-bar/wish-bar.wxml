@@ -1,0 +1,8 @@
+<!-- wish-bar —— 浮动心愿单条。仅放在 home/menu/mine 页；选了菜才浮出，点击进心愿单。 -->
+<view class="wishbar {{show ? 'show' : ''}}" bindtap="goWish">
+  <view class="avs">
+    <image wx:for="{{thumbs}}" wx:key="*this" class="av" src="{{item}}" mode="aspectFill" />
+  </view>
+  <view class="tx">已选 <text class="b">{{count}}</text> 道菜<text class="small">{{barSub}}</text></view>
+  <view class="send">去送出 <icon name="chevron-right" color="{{C.white}}" size="30" /></view>
+</view>

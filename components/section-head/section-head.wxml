@@ -1,0 +1,9 @@
+<!-- section-head —— 分区标题（左侧玫瑰竖条 + 标题 + 可选右侧"更多"）。
+     用法：<section-head title="治愈菜单" more="查看全部" bind:more="..." /> -->
+<view class="sec-head {{flush ? 'flush' : ''}}">
+  <view class="sec-title">{{title}}</view>
+  <view wx:if="{{more}}" class="sec-more" bindtap="onMore">
+    {{more}}
+    <icon wx:if="{{moreIcon}}" name="{{moreIcon}}" color="{{moreColor}}" size="{{moreIconSize}}" />
+  </view>
+</view>

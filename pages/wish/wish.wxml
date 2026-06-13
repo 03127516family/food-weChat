@@ -1,0 +1,86 @@
+<!-- 心愿单 wish -->
+<view class="wish-page">
+  <status-bar />
+
+  <view class="navbar">
+    <view class="nav-ic" bindtap="goBack"><icon name="chevron-left" color="{{C.ink}}" size="42" /></view>
+    <view class="title">我的心愿单</view>
+    <view class="nav-ic" bindtap="clearAll"><icon name="trash" color="{{C.ink}}" size="40" /></view>
+  </view>
+
+  <view class="wish-head">
+    <view class="wish-h1">{{copy.title}}</view>
+    <view class="sub">{{copy.sub}}</view>
+  </view>
+
+  <!-- 列表 / 空状态 -->
+  <view class="wish-list">
+    <block wx:if="{{dishes.length > 0}}">
+      <view wx:for="{{dishes}}" wx:key="id" class="wish-item">
+        <image class="thumb" src="{{item.img}}" mode="aspectFill" />
+        <view class="wi-body">
+          <view class="wi-name">{{item.name}}</view>
+          <view class="metas">
+            <text class="chip {{item.tagType}}">{{item.tag}}</text>
+            <view class="meta"><icon name="clock" color="{{C.ink2}}" size="24" />{{item.time}}分钟</view>
+          </view>
+        </view>
+        <view class="rm" data-id="{{item.id}}" catchtap="removeDish">
+          <icon name="close" color="{{C.ink3}}" size="30" />
+        </view>
+      </view>
+    </block>
+
+    <view wx:else class="wish-empty">
+      <view class="ill"><icon name="heart" color="{{C.white}}" size="84" /></view>
+      <view class="empty-title">{{copy.emptyTitle}}</view>
+      <view class="empty-desc">{{copy.emptyDesc}}</view>
+      <view class="go-menu" bindtap="goMenu">去看看菜单 <icon name="chevron-right" color="{{C.white}}" size="28" /></view>
+    </view>
+  </view>
+
+  <!-- 留言（仅有菜时） -->
+  <view wx:if="{{dishes.length > 0}}" class="msg-block">
+    <view class="msg-label">{{copy.msgLabel}}</view>
+    <view class="msg-card">
+      <textarea
+        class="msg-input"
+        value="{{msg}}"
+        maxlength="{{copy.msgMax}}"
+        placeholder="{{copy.msgPlaceholder}}"
+        placeholder-class="ph-text"
+        bindinput="onMsgInput"
+      />
+      <view class="msg-foot">{{msgCount}}/{{copy.msgMax}}</view>
+    </view>
+    <view class="phrase-row">
+      <view wx:for="{{copy.phrases}}" wx:key="*this" class="phrase" data-text="{{item}}" bindtap="fillPhrase">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="pad-bottom"></view>
+  <view class="pad-bottom"></view>
+</view>
+
+<!-- 送出按钮（仅有菜时） -->
+<view wx:if="{{dishes.length > 0}}" class="actionbar wish-action">
+  <button class="btn btn-primary wish-send" bindtap="sendWish">
+    <icon name="send" color="{{C.white}}" size="36" />送出 · 悄悄提醒他
+  </button>
+</view>
+
+<!-- 送出确认遮罩 -->
+<view class="sent-ov {{sentShow ? 'show' : ''}}">
+  <view class="sent-card">
+    <view class="env"><view class="pulse"></view><icon name="heart" color="{{C.white}}" size="100" /></view>
+    <view class="sent-h2">{{copy.sentTitle}}</view>
+    <view class="sent-p">{{copy.sentDesc}}</view>
+    <view class="mail-tag"><icon name="mail" color="{{C.sage600}}" size="26" />{{copy.sentMailTag}}</view>
+    <view class="sent-actions">
+      <button class="btn btn-primary" bindtap="viewCookSide">看看他会收到的</button>
+      <button class="btn btn-ghost" bindtap="backHome">回到首页</button>
+    </view>
+  </view>
+</view>
+
+<view class="toast {{toast.show ? 'show' : ''}}">{{toast.text}}</view>

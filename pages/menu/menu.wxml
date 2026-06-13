@@ -1,0 +1,28 @@
+<!-- 菜单 menu —— 治愈菜单整页列表。数据来自 /mock -->
+<view class="menu-page">
+  <status-bar />
+
+  <!-- 页头 -->
+  <view class="shop-head" style="padding-bottom:0">
+    <view class="head-title menu-h1">{{copy.title}}</view>
+    <view class="sub">{{copy.sub}}</view>
+  </view>
+
+  <view style="height:28rpx"></view>
+
+  <!-- 菜单列表 -->
+  <view class="menu-list">
+    <menu-item
+      wx:for="{{dishes}}"
+      wx:key="id"
+      dish="{{item}}"
+      bind:select="onDishTap"
+      bind:wish="onDishWish"
+    />
+  </view>
+
+  <view class="tabbar-safe"></view>
+</view>
+
+<wish-bar />
+<view class="toast {{toast.show ? 'show' : ''}}">{{toast.text}}</view>

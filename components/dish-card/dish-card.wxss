@@ -1,0 +1,18 @@
+/* dish-card —— 仅卡片专属样式；chip/meta/dot/heart/add/food 来自 shared.wxss */
+/* 宽度由父级控制（home 用 .hscroll dish-card{flex:0 0 300rpx}） */
+:host { display: block; }
+.dish {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 36rpx;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.dish .img { position: relative; height: 236rpx; }
+.dish .img .add { position: absolute; top: 18rpx; left: 18rpx; width: 54rpx; height: 54rpx; z-index: 3; }
+.dish .img .heart { position: absolute; top: 18rpx; right: 18rpx; width: 54rpx; height: 54rpx; }
+.dish .body { padding: 22rpx 24rpx 26rpx; }
+.dish-name { font-size: 29rpx; font-weight: 700; }
+.tagrow { margin: 16rpx 0 18rpx; }
+.dish .metas { display: flex; align-items: center; gap: 14rpx; }

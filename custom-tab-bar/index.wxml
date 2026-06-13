@@ -1,0 +1,20 @@
+<!-- 自定义 tabBar —— 还原毛玻璃底 + 玫瑰高亮 + 采购单红点。
+     选中态由各 tab 页 onShow 调 getTabBar().setSelected(i) 设置。 -->
+<view class="tabbar">
+  <view class="tabs">
+    <view
+      wx:for="{{list}}"
+      wx:key="path"
+      class="tab {{selected === index ? 'active' : ''}}"
+      data-index="{{index}}"
+      data-path="{{item.path}}"
+      bindtap="onTap"
+    >
+      <view class="tab-ic">
+        <icon name="{{item.icon}}" color="{{selected === index ? C.rose700 : C.ink3}}" size="50" />
+        <view wx:if="{{item.badge && badge}}" class="tab-dot"></view>
+      </view>
+      <text class="label">{{item.text}}</text>
+    </view>
+  </view>
+</view>

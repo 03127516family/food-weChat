@@ -1,0 +1,73 @@
+<!-- 首页 home -->
+<view class="home">
+  <status-bar />
+
+  <!-- 问候 -->
+  <view class="greet">
+    <view class="deco"></view>
+    <view class="greet-title">
+      <view class="line">{{home.greetLine1}}</view>
+      <view class="hl">{{home.greetHl}}</view>
+    </view>
+    <view class="sub">{{home.greetSub}}<icon name="heart" color="{{C.rose300}}" size="28" /></view>
+  </view>
+
+  <!-- 搜索 -->
+  <view class="search" bindtap="onSearch">
+    <icon name="search" color="{{C.ink3}}" size="36" />
+    <input class="field" placeholder="{{home.searchPlaceholder}}" placeholder-class="ph-text" disabled />
+    <view class="go">搜索</view>
+  </view>
+
+  <!-- 今日推荐 -->
+  <view class="today" bindtap="goToday">
+    <view class="left">
+      <view class="badge"><icon name="star" color="{{C.rose700}}" size="26" />{{home.todayBadge}}</view>
+      <view class="today-name">{{today.name}}</view>
+      <view class="desc">{{today.desc}}</view>
+      <view class="metas">
+        <view class="meta"><icon name="clock" color="{{C.ink2}}" size="28" />{{today.time}}分钟</view>
+        <view class="dot"></view>
+        <view class="meta"><icon name="level" color="{{C.ink2}}" size="28" />{{today.difficulty}}</view>
+      </view>
+      <view class="cta">查看菜谱 <icon name="chevron-right" color="{{C.white}}" size="30" /></view>
+    </view>
+    <view class="img"><image class="food" src="{{today.img}}" mode="aspectFill" /></view>
+    <view class="heart {{todaySaved ? 'on' : ''}}" catchtap="toggleTodayHeart">
+      <icon name="heart" color="{{todaySaved ? C.white : C.rose500}}" size="30" />
+    </view>
+  </view>
+
+  <!-- 治愈菜单 -->
+  <section-head title="治愈菜单" more="查看全部" bind:more="goMenu" />
+  <scroll-view class="hscroll" scroll-x enable-flex>
+    <dish-card
+      wx:for="{{menuDishes}}"
+      wx:key="id"
+      dish="{{item}}"
+      bind:select="onDishTap"
+      bind:wish="onDishWish"
+    />
+  </scroll-view>
+
+  <!-- 根据她的心情 -->
+  <section-head title="根据她的心情" more="换一换" moreIcon="refresh" bind:more="refreshMoods" />
+  <scroll-view class="moods" scroll-x enable-flex>
+    <view
+      wx:for="{{moods}}"
+      wx:key="label"
+      class="mood {{item.tone}}"
+      data-i="{{index}}"
+      bindtap="onMood"
+    >
+      <icon name="{{item.icon}}" color="{{item.color}}" size="36" />
+      {{item.label}}
+      <icon name="chevron-right" color="{{item.color}}" size="28" />
+    </view>
+  </scroll-view>
+
+  <view class="tabbar-safe"></view>
+</view>
+
+<wish-bar />
+<view class="toast {{toast.show ? 'show' : ''}}">{{toast.text}}</view>

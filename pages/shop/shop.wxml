@@ -1,0 +1,96 @@
+<!-- 采购单 shop —— 做饭的人的视角（对照原型 #shop）。数据来自 /mock + store。 -->
+<view class="shop-page">
+  <status-bar />
+
+  <!-- 页头 -->
+  <view class="shop-head">
+    <view class="deco"></view>
+    <view class="head-title">{{copy.title}} <icon name="heart" color="{{C.rose300}}" size="44" /></view>
+    <view class="sub">{{copy.sub}}</view>
+  </view>
+
+  <!-- 今晚准备 -->
+  <view class="tonight">
+    <view class="cup"></view>
+    <view class="t-top">
+      <view class="t3">{{copy.tonightTitle}}</view>
+      <text class="chip rose">{{tonightCount}} 道菜</text>
+    </view>
+    <view wx:for="{{tonight}}" wx:key="id" class="t-dish">
+      <image class="thumb" src="{{item.img}}" mode="aspectFill" />
+      <view>
+        <view class="nm">{{item.name}}</view>
+        <view class="tm"><icon name="clock" color="{{C.rose500}}" size="24" />{{item.time}}分钟</view>
+      </view>
+    </view>
+    <view class="t-foot">
+      <view class="l"><icon name="clock" color="{{C.rose500}}" size="28" /><text>预计用时 {{tonightTime}}分钟</text></view>
+      <view class="r">{{copy.tonightFoot}} <icon name="heart" color="{{C.rose500}}" size="26" /></view>
+    </view>
+  </view>
+
+  <!-- 她的留言（仅当有留言时） -->
+  <view wx:if="{{herMessage}}" class="her-msg">
+    <view class="hm-ic"><icon name="quote" color="{{C.rose500}}" size="36" /></view>
+    <view class="hm-body">
+      <view class="qt">“{{herMessage}}”</view>
+      <view class="who">{{copy.herWho}}</view>
+    </view>
+  </view>
+
+  <!-- 采购清单 -->
+  <section-head title="采购清单" more="清空已勾选" moreIcon="trash" bind:more="clearChecked" />
+  <view class="list-card">
+    <block wx:for="{{checklist}}" wx:key="title" wx:for-item="g" wx:for-index="gi">
+      <view class="grp-head">
+        <icon name="{{g.icon}}" color="{{C.sage600}}" size="34" />{{g.title}}
+        <icon class="cv" name="chevron-down" color="{{C.ink3}}" size="32" />
+      </view>
+      <view
+        wx:for="{{g.items}}"
+        wx:key="name"
+        wx:for-item="it"
+        wx:for-index="ii"
+        class="li {{it.done ? 'done' : ''}}"
+        data-gi="{{gi}}"
+        data-ii="{{ii}}"
+        bindtap="toggleLi"
+      >
+        <view class="box"><icon wx:if="{{it.done}}" name="check" color="{{C.white}}" size="24" /></view>
+        <view class="nm">{{it.name}}</view>
+        <view class="qt">{{it.qty}}</view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 做饭时间安排 -->
+  <section-head title="做饭时间安排" />
+  <view class="timeline">
+    <block wx:for="{{timeline}}" wx:key="time" wx:for-index="i">
+      <view class="tl {{item.tone}}">
+        <icon name="{{item.icon}}" color="{{item.color}}" size="48" />
+        <view class="tm">{{item.time}}</view>
+        <view class="nm">{{item.name}}</view>
+        <view class="ds">{{item.desc}}</view>
+      </view>
+      <view wx:if="{{i < timeline.length - 1}}" class="tl-link">
+        <icon name="arrow-right" color="{{C.rose300}}" size="32" />
+      </view>
+    </block>
+  </view>
+
+  <!-- 底部留白：让内容越过浮动操作条 + tabBar -->
+  <view style="height: 220rpx;"></view>
+</view>
+
+<!-- 浮动操作条（在 tabBar 之上） -->
+<view class="shop-actionbar">
+  <button class="btn btn-ghost shop-share" bindtap="onShare">
+    <icon name="share-nodes" color="{{C.rose700}}" size="36" />分享菜单
+  </button>
+  <button class="btn btn-primary" style="flex:1.5;padding:30rpx;" bindtap="onStartCook">
+    <icon name="chef" color="{{C.white}}" size="36" />开始做饭
+  </button>
+</view>
+
+<view class="toast {{toast.show ? 'show' : ''}}">{{toast.text}}</view>

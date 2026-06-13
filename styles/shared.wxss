@@ -1,0 +1,147 @@
+/* shared.wxss —— 共享原子类，沿用原型命名以便对照。
+   px×2=rpx；1px 细线保留不放大。
+   组件若要用这些类，需在 Component options 里设 styleIsolation:'apply-shared'。 */
+
+/* ---------- 图片 ---------- */
+.food { width: 100%; height: 100%; display: block; }
+.thumb { display: block; }
+
+/* ---------- 食物占位（有真图后基本不用，留作兜底） ---------- */
+.ph {
+  position: relative;
+  background:
+    radial-gradient(120% 90% at 30% 20%, #FBF1E9 0%, transparent 55%),
+    linear-gradient(150deg, #EFE0D2, #E8D6C6);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.ph.rosey {
+  background:
+    radial-gradient(120% 90% at 30% 20%, #F8E7E2 0%, transparent 55%),
+    linear-gradient(150deg, #F0D6CF, #E7C5BD);
+}
+
+/* ---------- chips ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 10rpx;
+  font-size: 22rpx; padding: 8rpx 20rpx; border-radius: 40rpx;
+  font-weight: 500; white-space: nowrap;
+}
+.chip.rose { background: var(--rose-100); color: var(--rose-700); }
+.chip.sage { background: var(--sage-100); color: var(--sage-600); }
+.chip.honey { background: var(--honey-100); color: var(--honey-600); }
+
+/* ---------- meta（时间/难度等小信息） ---------- */
+.meta {
+  display: flex; align-items: center; gap: 10rpx;
+  font-size: 24rpx; color: var(--ink-2); white-space: nowrap;
+}
+.dot { width: 1px; height: 22rpx; background: var(--line); }
+
+/* ---------- 分区标题 ---------- */
+.sec-pad { padding: 0 44rpx; }
+.sec-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 52rpx 44rpx 28rpx;
+}
+.sec-head.flush { margin-left: 0; margin-right: 0; }
+.sec-title {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-weight: 600; font-size: 38rpx; color: var(--ink);
+  display: flex; align-items: center; gap: 20rpx;
+}
+.sec-title::before {
+  content: ""; width: 8rpx; height: 34rpx; border-radius: 6rpx;
+  background: var(--rose-500);
+}
+.sec-more {
+  font-size: 25rpx; color: var(--ink-2);
+  display: flex; align-items: center; gap: 6rpx; white-space: nowrap;
+}
+
+/* ---------- 按钮 ---------- */
+.btn { border: none; font-family: inherit; font-weight: 500; line-height: 1; }
+.btn::after { border: none; } /* 去掉小程序 button 默认边框 */
+.btn-primary {
+  background: var(--rose-500); color: #fff; border-radius: 60rpx; font-size: 30rpx;
+  box-shadow: 0 16rpx 36rpx rgba(195, 120, 118, 0.32);
+  display: inline-flex; align-items: center; justify-content: center; gap: 16rpx;
+}
+.btn-ghost {
+  background: var(--surface); color: var(--sage-600); border: 3rpx solid var(--sage-100);
+  border-radius: 60rpx; font-size: 30rpx;
+  display: inline-flex; align-items: center; justify-content: center; gap: 16rpx;
+}
+
+/* ---------- 底部操作条 ---------- */
+.actionbar {
+  position: sticky; bottom: 0; display: flex; gap: 24rpx;
+  padding: 28rpx 44rpx 36rpx;
+  background: linear-gradient(to top, var(--cream) 72%, rgba(250, 245, 238, 0));
+  z-index: 20;
+}
+
+/* ---------- 收藏爱心 ---------- */
+.heart {
+  width: 60rpx; height: 60rpx; border-radius: 50%;
+  background: rgba(255, 253, 250, 0.86);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6rpx 18rpx rgba(150, 110, 95, 0.18); color: var(--rose-500);
+}
+.heart.on { color: #fff; background: var(--rose-500); }
+
+/* ---------- 加入心愿单 圆形按钮 ---------- */
+.add {
+  width: 60rpx; height: 60rpx; border-radius: 50%;
+  background: var(--rose-500); color: #fff;
+  display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  box-shadow: 0 8rpx 22rpx rgba(195, 120, 118, 0.34);
+  transition: transform 0.15s, background 0.2s;
+}
+.add.pressed { transform: scale(0.88); }
+.add.in { background: var(--sage-600); box-shadow: 0 8rpx 22rpx rgba(126, 146, 112, 0.32); }
+
+/* ---------- 自绘导航栏 ---------- */
+.navbar {
+  height: 100rpx; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 36rpx; background: var(--cream); position: relative; z-index: 30;
+}
+.navbar .title {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 600; font-size: 34rpx;
+}
+.nav-ic {
+  width: 76rpx; height: 76rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: var(--ink);
+}
+.nav-right { display: flex; gap: 8rpx; }
+
+/* ---------- 页头（菜单 / 采购单共用，对应原型 .shop-head） ---------- */
+.shop-head { padding: 32rpx 44rpx 0; position: relative; }
+.shop-head .head-title {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 60rpx;
+  display: flex; align-items: center; gap: 18rpx;
+}
+.shop-head .sub { font-size: 25rpx; color: var(--ink-2); margin-top: 18rpx; letter-spacing: 0.03em; }
+.shop-head .deco {
+  position: absolute; top: -8rpx; right: 32rpx; width: 224rpx; height: 220rpx;
+  border-radius: 50% 50% 48% 52% / 60% 58% 42% 40%;
+  background:
+    radial-gradient(55% 55% at 60% 40%, #F2C7C2 0%, transparent 60%),
+    radial-gradient(46% 46% at 32% 70%, #E6D2B6 0%, transparent 60%);
+  filter: blur(4rpx); opacity: 0.82;
+}
+
+/* ---------- 底部留白 ---------- */
+.pad-bottom { height: 48rpx; }
+
+/* ---------- 自定义 tabBar 占位（tab 页底部留白，避免内容被遮挡） ---------- */
+.tabbar-safe { height: calc(env(safe-area-inset-bottom) + 140rpx); }
+
+/* ---------- toast（搭配 utils/toast 行为，per page 引入） ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 280rpx;
+  transform: translateX(-50%) translateY(20rpx);
+  background: rgba(62, 55, 51, 0.94); color: #fff;
+  font-size: 25rpx; padding: 20rpx 36rpx; border-radius: 44rpx;
+  opacity: 0; pointer-events: none; transition: 0.3s; z-index: 60; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }

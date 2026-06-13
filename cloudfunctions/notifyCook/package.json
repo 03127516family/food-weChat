@@ -1,0 +1,9 @@
+{
+  "name": "notifyCook",
+  "version": "1.0.0",
+  "description": "向做饭的人下发订阅消息",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

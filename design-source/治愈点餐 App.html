@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>治愈点餐 · 为她下厨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* warm cream surfaces */
+  --cream:#FAF5EE;
+  --cream-2:#F4ECE1;
+  --surface:#FFFCF8;
+  --line:#EDE3D6;
+
+  /* dusty rose primary (low chroma) */
+  --rose-700:#B26E6E;
+  --rose-500:#D38C8B;
+  --rose-300:#EBC9C5;
+  --rose-100:#F7E6E2;
+  --rose-50:#FBF0EC;
+
+  /* sage secondary */
+  --sage-600:#7E9270;
+  --sage-100:#E9EFE2;
+
+  /* honey tertiary */
+  --honey-600:#B98F50;
+  --honey-100:#F4EAD4;
+
+  /* ink */
+  --ink:#3E3733;
+  --ink-2:#8B8179;
+  --ink-3:#B7ada3;
+
+  --shadow:0 10px 30px rgba(180,140,118,.16);
+  --shadow-sm:0 6px 16px rgba(180,140,118,.12);
+  --r-card:22px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  font-family:"Noto Sans SC","PingFang SC",system-ui,sans-serif;
+  background:
+    radial-gradient(1200px 700px at 18% 12%, #F6ECE4 0%, transparent 60%),
+    radial-gradient(1000px 800px at 85% 88%, #F3E5E2 0%, transparent 55%),
+    #EFE6DB;
+  color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;
+  min-height:100vh;padding:40px 16px 60px;gap:22px;
+}
+.stage-title{text-align:center;color:#8a776c;}
+.stage-title h1{font-family:"Noto Serif SC",serif;font-weight:600;font-size:20px;letter-spacing:.06em;color:#7a655c;white-space:nowrap;}
+.stage-title p{font-size:12.5px;margin-top:5px;letter-spacing:.16em;color:#a8978c;white-space:nowrap;}
+
+/* ---------- device ---------- */
+.bezel{
+  width:413px;height:872px;border-radius:62px;
+  background:linear-gradient(160deg,#2b2723,#15120f);
+  padding:10px;box-shadow:0 40px 90px rgba(60,45,38,.45),0 2px 0 rgba(255,255,255,.06) inset;
+  position:relative;flex:0 0 auto;
+}
+.phone{
+  width:393px;height:852px;border-radius:53px;overflow:hidden;
+  background:var(--cream);position:relative;display:flex;flex-direction:column;
+}
+
+/* status bar */
+.statusbar{
+  height:54px;flex:0 0 auto;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 30px 11px;position:relative;z-index:40;
+  font-variant-numeric:tabular-nums;
+}
+.statusbar.over{position:absolute;left:0;right:0;top:0;}
+.sb-time{font-size:16px;font-weight:600;letter-spacing:.02em;color:var(--ink);}
+.sb-right{display:flex;align-items:center;gap:7px;}
+.sb-right svg{display:block;}
+
+/* dynamic island */
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:122px;height:34px;background:#0d0b09;border-radius:20px;z-index:45;}
+
+/* viewport (scroll region between status + tab) */
+.viewport{flex:1 1 auto;position:relative;overflow:hidden;}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;display:none;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.screen::-webkit-scrollbar{display:none;}
+.screen.active{display:block;}
+.screen.nav-anim{animation:fade .35s ease;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+
+/* tab bar */
+.tabbar{flex:0 0 auto;height:83px;background:rgba(252,247,240,.92);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);padding:9px 12px 0;position:relative;z-index:40;}
+.tabs{display:flex;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:var(--ink-3);}
+.tab span{font-size:10.5px;letter-spacing:.04em;}
+.tab svg{width:25px;height:25px;}
+.tab.active{color:var(--rose-700);}
+.home-indicator{position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:134px;height:5px;border-radius:3px;background:#3E3733;opacity:.85;}
+
+/* ---------- shared bits ---------- */
+.sec-pad{padding:0 22px;}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:26px 22px 14px;}
+.sec-title{font-family:"Noto Serif SC",serif;font-weight:600;font-size:19px;color:var(--ink);display:flex;align-items:center;gap:10px;}
+.sec-title::before{content:"";width:4px;height:17px;border-radius:3px;background:var(--rose-500);}
+.sec-more{font-size:12.5px;color:var(--ink-2);display:flex;align-items:center;gap:3px;white-space:nowrap;}
+
+/* food placeholder */
+.ph{position:relative;background:
+   radial-gradient(120% 90% at 30% 20%, #FBF1E9 0%, transparent 55%),
+   linear-gradient(150deg,#EFE0D2,#E8D6C6);
+   display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.ph svg{width:34px;height:34px;color:#C9B6A4;opacity:.7;}
+.ph.rosey{background:radial-gradient(120% 90% at 30% 20%,#F8E7E2 0%,transparent 55%),linear-gradient(150deg,#F0D6CF,#E7C5Bd);}
+.ph .lbl{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.18em;color:rgba(110,90,78,.6);font-family:"Noto Sans SC";}
+.food{width:100%;height:100%;object-fit:cover;display:block;}
+img.thumb{object-fit:cover;display:block;}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;white-space:nowrap;}
+.chip.rose{background:var(--rose-100);color:var(--rose-700);}
+.chip.sage{background:var(--sage-100);color:var(--sage-600);}
+.chip.honey{background:var(--honey-100);color:var(--honey-600);}
+
+.meta{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--ink-2);white-space:nowrap;}
+.meta svg{width:14px;height:14px;opacity:.8;}
+.dot{width:1px;height:11px;background:var(--line);}
+
+/* buttons */
+.btn{border:none;font-family:inherit;cursor:pointer;font-weight:500;}
+.btn-primary{background:var(--rose-500);color:#fff;border-radius:30px;font-size:15px;
+  box-shadow:0 8px 18px rgba(195,120,118,.32);display:inline-flex;align-items:center;justify-content:center;gap:8px;}
+.btn-ghost{background:var(--surface);color:var(--sage-600);border:1.5px solid var(--sage-100);
+  border-radius:30px;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
+
+/* bottom action bar inside screen */
+.actionbar{position:sticky;bottom:0;display:flex;gap:12px;padding:14px 22px 18px;
+  background:linear-gradient(to top,var(--cream) 72%,rgba(250,245,238,0));z-index:20;}
+
+/* heart save button on cards */
+.heart{width:30px;height:30px;border-radius:50%;background:rgba(255,253,250,.86);
+  backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 3px 9px rgba(150,110,95,.18);color:var(--rose-500);}
+.heart svg{width:15px;height:15px;}
+.heart.on{color:#fff;background:var(--rose-500);}
+
+/* ================= HOME ================= */
+#home{background:
+  radial-gradient(420px 320px at 100% -4%, #F6E4DF 0%, transparent 62%),
+  var(--cream);}
+.greet{padding:14px 22px 0;position:relative;}
+.greet .deco{position:absolute;top:-2px;right:14px;width:120px;height:118px;border-radius:50% 50% 48% 52%/60% 58% 42% 40%;
+  background:radial-gradient(60% 60% at 60% 35%,#F4C9C4 0%,transparent 60%),
+            radial-gradient(50% 50% at 35% 70%,#E7D2B8 0%,transparent 60%);
+  filter:blur(2px);opacity:.85;}
+.greet h1{font-family:"Noto Serif SC",serif;font-weight:700;font-size:33px;line-height:1.32;letter-spacing:.01em;position:relative;}
+.greet h1 .hl{color:var(--rose-700);}
+.greet .sub{margin-top:11px;font-size:13px;color:var(--ink-2);letter-spacing:.03em;display:flex;align-items:center;gap:6px;}
+.greet .sub svg{width:14px;height:14px;color:var(--rose-300);}
+
+.search{margin:20px 22px 0;display:flex;align-items:center;gap:10px;background:var(--surface);
+  border:1px solid var(--line);border-radius:18px;padding:13px 14px;box-shadow:var(--shadow-sm);}
+.search svg{width:18px;height:18px;color:var(--ink-3);flex:0 0 auto;}
+.search input{flex:1;border:none;background:none;font-family:inherit;font-size:13.5px;color:var(--ink);outline:none;}
+.search input::placeholder{color:var(--ink-3);}
+.search .go{background:var(--rose-500);color:#fff;font-size:13px;padding:8px 16px;border-radius:13px;font-weight:500;}
+
+/* today card */
+.today{margin:22px;border-radius:var(--r-card);overflow:hidden;background:linear-gradient(135deg,#FAEAE5,#F3DCD8);
+  box-shadow:var(--shadow);display:flex;position:relative;min-height:190px;}
+.today .left{padding:18px 16px 18px 19px;display:flex;flex-direction:column;width:54%;}
+.today .badge{align-self:flex-start;display:inline-flex;align-items:center;gap:5px;background:var(--surface);
+  color:var(--rose-700);font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:20px;box-shadow:var(--shadow-sm);}
+.today .badge svg{width:13px;height:13px;}
+.today h3{font-family:"Noto Serif SC",serif;font-weight:700;font-size:24px;margin-top:14px;letter-spacing:.01em;}
+.today .desc{font-size:12px;color:#9a7d77;margin-top:7px;line-height:1.6;}
+.today .metas{display:flex;align-items:center;gap:9px;margin-top:auto;padding-top:12px;}
+.today .cta{margin-top:14px;align-self:flex-start;background:var(--rose-500);color:#fff;padding:10px 18px;border-radius:24px;font-size:13.5px;font-weight:500;
+  display:inline-flex;align-items:center;gap:7px;box-shadow:0 8px 16px rgba(195,120,118,.3);}
+.today .img{position:absolute;right:0;top:0;bottom:0;width:48%;}
+.today .img .ph{width:100%;height:100%;}
+.today .heart{position:absolute;top:13px;right:13px;}
+
+/* menu cards (horizontal) */
+.hscroll{display:flex;gap:13px;overflow-x:auto;padding:2px 22px 4px;scrollbar-width:none;}
+.hscroll::-webkit-scrollbar{display:none;}
+.dish{flex:0 0 150px;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);}
+.dish .img{position:relative;height:118px;}
+.dish .img .ph{width:100%;height:100%;}
+.dish .img .heart{position:absolute;top:9px;right:9px;width:27px;height:27px;}
+.dish .body{padding:11px 12px 13px;}
+.dish h4{font-size:14.5px;font-weight:700;}
+.dish .tagrow{margin:8px 0 9px;}
+.dish .metas{display:flex;align-items:center;gap:7px;}
+
+/* mood chips */
+.moods{display:flex;gap:11px;overflow-x:auto;padding:2px 22px 6px;scrollbar-width:none;}
+.moods::-webkit-scrollbar{display:none;}
+.mood{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:18px;font-size:13.5px;font-weight:500;cursor:pointer;}
+.mood svg{width:18px;height:18px;}
+.mood .arrow{width:14px;height:14px;opacity:.5;margin-left:2px;}
+.mood.m1{background:var(--sage-100);color:var(--sage-600);}
+.mood.m2{background:var(--rose-100);color:var(--rose-700);}
+.mood.m3{background:#F1E7DF;color:#9a8270;}
+.mood.m4{background:var(--honey-100);color:var(--honey-600);}
+
+/* ================= DETAIL ================= */
+.navbar{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;
+  background:var(--cream);position:sticky;top:0;z-index:30;}
+.navbar .title{font-family:"Noto Serif SC",serif;font-weight:600;font-size:17px;}
+.nav-ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink);cursor:pointer;}
+.nav-ic svg{width:21px;height:21px;}
+.nav-right{display:flex;gap:4px;}
+
+.detail-hero{height:260px;position:relative;}
+.detail-hero .ph{width:100%;height:100%;}
+.detail-sheet{background:var(--cream);border-radius:26px 26px 0 0;margin-top:-26px;position:relative;z-index:2;padding:22px 22px 0;}
+.detail-sheet h2{font-family:"Noto Serif SC",serif;font-weight:700;font-size:25px;}
+.love{display:inline-flex;align-items:center;gap:6px;background:var(--rose-100);color:var(--rose-700);font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;}
+.love svg{width:14px;height:14px;}
+.detail-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.detail-desc{font-size:13px;color:var(--ink-2);line-height:1.7;margin-top:11px;}
+.detail-desc b{color:var(--rose-700);font-weight:500;}
+
+.stats{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-top:18px;padding:16px 0;box-shadow:var(--shadow-sm);}
+.stat{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;}
+.stat+.stat::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:1px;background:var(--line);}
+.stat svg{width:22px;height:22px;color:var(--rose-500);margin-bottom:3px;}
+.stat .v{font-size:15px;font-weight:700;white-space:nowrap;}
+.stat .k{font-size:11px;color:var(--ink-3);white-space:nowrap;}
+
+.ing-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:4px;}
+.ing{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:9px 11px;position:relative;}
+.ing .thumb{width:42px;height:42px;border-radius:11px;flex:0 0 auto;}
+.ing .nm{font-size:13.5px;font-weight:500;}
+.ing .qt{font-size:11px;color:var(--ink-3);margin-top:2px;}
+.ing .ck{position:absolute;top:9px;right:9px;width:18px;height:18px;border-radius:50%;background:var(--sage-600);display:flex;align-items:center;justify-content:center;}
+.ing .ck svg{width:11px;height:11px;color:#fff;}
+.hint{font-size:11.5px;color:var(--ink-3);margin:13px 2px 0;display:flex;align-items:center;gap:6px;}
+.hint svg{width:14px;height:14px;color:var(--honey-600);}
+
+.steps{margin-top:6px;display:flex;flex-direction:column;gap:12px;}
+.step{display:flex;gap:13px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 15px;}
+.step .no{width:26px;height:26px;border-radius:50%;background:var(--rose-100);color:var(--rose-700);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.step .tx{flex:1;font-size:13px;line-height:1.6;color:var(--ink);}
+.step .ic{width:34px;height:34px;color:var(--ink-3);opacity:.65;flex:0 0 auto;}
+
+/* ================= SHOP ================= */
+#shop{background:radial-gradient(420px 300px at 100% -3%, #F6E4DF 0%, transparent 60%),var(--cream);}
+.shop-head{padding:16px 22px 0;position:relative;}
+.shop-head .deco{position:absolute;top:-4px;right:16px;width:112px;height:110px;border-radius:50% 50% 48% 52%/60% 58% 42% 40%;
+  background:radial-gradient(55% 55% at 60% 40%,#F2C7C2 0%,transparent 60%),radial-gradient(46% 46% at 32% 70%,#E6D2B6 0%,transparent 60%);filter:blur(2px);opacity:.82;}
+.shop-head h1{font-family:"Noto Serif SC",serif;font-weight:700;font-size:30px;display:flex;align-items:center;gap:9px;}
+.shop-head h1 svg{width:22px;height:22px;color:var(--rose-300);}
+.shop-head .sub{font-size:12.5px;color:var(--ink-2);margin-top:9px;letter-spacing:.03em;}
+
+.tonight{margin:18px 22px 0;background:linear-gradient(135deg,#FAEAE5,#F3DCD8);border-radius:var(--r-card);padding:17px 17px 0;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.tonight .cup{position:absolute;right:-8px;bottom:14px;width:96px;height:96px;border-radius:50%;
+  background:radial-gradient(60% 60% at 50% 40%,#F1C6C1 0%,transparent 62%);opacity:.8;}
+.tonight .t-top{display:flex;align-items:center;justify-content:space-between;}
+.tonight .t-top h3{font-size:15px;font-weight:700;color:#7e5f5a;}
+.t-dish{display:flex;align-items:center;gap:12px;padding:11px 0;position:relative;z-index:2;}
+.t-dish+.t-dish{border-top:1px solid rgba(180,130,120,.16);}
+.t-dish .thumb{width:50px;height:50px;border-radius:13px;flex:0 0 auto;}
+.t-dish .nm{font-size:15px;font-weight:500;}
+.t-dish .tm{font-size:11.5px;color:#9a7d77;margin-top:3px;display:flex;align-items:center;gap:4px;}
+.t-dish .tm svg{width:12px;height:12px;}
+.t-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(180,130,120,.18);
+  margin-top:5px;padding:13px 0;font-size:12px;color:#9a7d77;position:relative;z-index:2;}
+.t-foot .l{display:flex;align-items:center;gap:7px;white-space:nowrap;}
+.t-foot .l svg{width:14px;height:14px;}
+.t-foot .r{display:flex;align-items:center;gap:5px;}
+.t-foot .r svg{width:13px;height:13px;color:var(--rose-500);}
+
+/* checklist */
+.list-card{margin:0 22px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 16px;box-shadow:var(--shadow-sm);}
+.grp-head{display:flex;align-items:center;gap:8px;padding:14px 0 6px;font-size:13.5px;font-weight:700;color:var(--ink);}
+.grp-head svg{width:17px;height:17px;color:var(--sage-600);}
+.grp-head .cv{margin-left:auto;width:16px;height:16px;color:var(--ink-3);}
+.li{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px dashed var(--line);cursor:pointer;}
+.grp-head + .li{border-top:none;}
+.li .box{width:21px;height:21px;border-radius:7px;border:1.8px solid var(--rose-300);flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:var(--surface);}
+.li .box svg{width:12px;height:12px;color:#fff;opacity:0;}
+.li.done .box{background:var(--rose-500);border-color:var(--rose-500);}
+.li.done .box svg{opacity:1;}
+.li .nm{flex:1;font-size:14px;}
+.li.done .nm{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rose-300);}
+.li .qt{font-size:12.5px;color:var(--ink-3);}
+
+/* timeline */
+.timeline{display:flex;gap:8px;padding:2px 22px 4px;}
+.tl{flex:1;border-radius:16px;padding:13px 11px;text-align:center;position:relative;}
+.tl .tm{font-size:13px;font-weight:700;}
+.tl .nm{font-size:12.5px;font-weight:500;margin-top:5px;}
+.tl .ds{font-size:10px;margin-top:3px;opacity:.75;}
+.tl svg{width:24px;height:24px;margin-bottom:5px;}
+.tl.a{background:var(--sage-100);color:var(--sage-600);}
+.tl.b{background:var(--rose-100);color:var(--rose-700);}
+.tl.c{background:var(--honey-100);color:var(--honey-600);}
+.tl-link{align-self:center;width:18px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:var(--rose-300);}
+
+/* menu list screen */
+.menu-list{padding:4px 22px 0;display:flex;flex-direction:column;gap:13px;}
+.ml{display:flex;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:11px;box-shadow:var(--shadow-sm);align-items:center;}
+.ml .thumb{width:74px;height:74px;border-radius:14px;flex:0 0 auto;}
+.ml h4{font-size:15.5px;font-weight:700;}
+.ml .metas{display:flex;align-items:center;gap:8px;margin-top:9px;}
+.ml .heart{margin-left:auto;}
+
+/* mine */
+.mine-wrap{padding:30px 22px;text-align:center;color:var(--ink-2);}
+.mine-av{width:88px;height:88px;border-radius:50%;margin:18px auto 14px;background:linear-gradient(150deg,#F0D6CF,#E7C5Bd);display:flex;align-items:center;justify-content:center;color:#fff;}
+.mine-av svg{width:42px;height:42px;}
+.mine-wrap h3{font-family:"Noto Serif SC",serif;font-size:21px;color:var(--ink);}
+.mine-row{display:flex;justify-content:space-around;margin:24px 0;}
+.mine-row .v{font-family:"Noto Serif SC";font-size:22px;font-weight:700;color:var(--rose-700);}
+.mine-row .k{font-size:11.5px;color:var(--ink-3);margin-top:4px;}
+.mine-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;text-align:left;box-shadow:var(--shadow-sm);overflow:hidden;}
+.mine-li{display:flex;align-items:center;gap:13px;padding:15px 16px;font-size:14.5px;color:var(--ink);}
+.mine-li+.mine-li{border-top:1px solid var(--line);}
+.mine-li svg{width:19px;height:19px;color:var(--rose-500);}
+.mine-li .ar{margin-left:auto;color:var(--ink-3);width:16px;height:16px;}
+
+.pad-bottom{height:24px;}
+.toast{position:absolute;left:50%;bottom:104px;transform:translateX(-50%) translateY(10px);background:rgba(62,55,51,.94);
+  color:#fff;font-size:12.5px;padding:10px 18px;border-radius:22px;opacity:0;pointer-events:none;transition:.3s;z-index:60;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ===== add-to-wish button ===== */
+.add{width:30px;height:30px;border-radius:50%;background:var(--rose-500);color:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 11px rgba(195,120,118,.34);
+  transition:transform .15s,background .2s;}
+.add:active{transform:scale(.88);}
+.add svg{width:16px;height:16px;}
+.add.in{background:var(--sage-600);box-shadow:0 4px 11px rgba(126,146,112,.32);}
+.dish .img .add{position:absolute;top:9px;left:9px;width:27px;height:27px;z-index:3;}
+.dish .img .add svg{width:15px;height:15px;}
+.ml .add{flex:0 0 auto;}
+
+/* ===== floating wish bar ===== */
+.wishbar{position:absolute;left:15px;right:15px;bottom:95px;z-index:50;
+  background:rgba(62,55,51,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  color:#fff;border-radius:20px;padding:10px 12px 10px 13px;display:flex;align-items:center;gap:11px;
+  box-shadow:0 16px 34px rgba(110,70,60,.4);transform:translateY(30px) scale(.96);opacity:0;pointer-events:none;
+  transition:.34s cubic-bezier(.2,.85,.25,1);}
+.wishbar.show{transform:none;opacity:1;pointer-events:auto;cursor:pointer;}
+.wishbar .avs{display:flex;flex:0 0 auto;}
+.wishbar .avs img{width:32px;height:32px;border-radius:9px;object-fit:cover;border:2px solid #3E3733;margin-left:-10px;}
+.wishbar .avs img:first-child{margin-left:0;}
+.wishbar .tx{font-size:13px;font-weight:500;line-height:1.3;}
+.wishbar .tx b{color:var(--rose-300);font-weight:700;}
+.wishbar .tx small{display:block;font-size:10.5px;color:rgba(255,255,255,.62);margin-top:1px;letter-spacing:.02em;}
+.wishbar .send{margin-left:auto;background:var(--rose-500);color:#fff;font-size:13px;font-weight:600;
+  padding:9px 15px;border-radius:14px;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.wishbar .send svg{width:15px;height:15px;}
+
+/* ===== wish screen ===== */
+#wish{background:radial-gradient(420px 320px at 100% -4%, #F6E4DF 0%, transparent 62%),var(--cream);}
+.wish-head{padding:8px 22px 0;}
+.wish-head h1{font-family:"Noto Serif SC",serif;font-weight:700;font-size:27px;}
+.wish-head .sub{font-size:12.5px;color:var(--ink-2);margin-top:8px;letter-spacing:.02em;}
+.wish-list{padding:18px 22px 2px;display:flex;flex-direction:column;gap:12px;}
+.wish-item{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);
+  border-radius:18px;padding:11px;box-shadow:var(--shadow-sm);animation:fade .35s ease;}
+.wish-item .thumb{width:62px;height:62px;border-radius:14px;flex:0 0 auto;}
+.wish-item .wi-body{flex:1;}
+.wish-item h4{font-size:15.5px;font-weight:700;}
+.wish-item .metas{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.wish-item .rm{width:30px;height:30px;border-radius:50%;border:none;background:var(--cream-2);color:var(--ink-3);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;}
+.wish-item .rm svg{width:15px;height:15px;}
+.wish-empty{padding:40px 30px;text-align:center;}
+.wish-empty .ill{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;
+  background:radial-gradient(60% 60% at 50% 40%,#F4C9C4 0%,transparent 62%),linear-gradient(150deg,#F0D6CF,#E7C5Bd);
+  display:flex;align-items:center;justify-content:center;color:#fff;}
+.wish-empty .ill svg{width:42px;height:42px;}
+.wish-empty h3{font-family:"Noto Serif SC",serif;font-size:18px;color:var(--ink);}
+.wish-empty p{font-size:12.5px;color:var(--ink-2);margin-top:8px;line-height:1.7;}
+.wish-empty .go-menu{display:inline-flex;align-items:center;gap:6px;margin-top:18px;background:var(--rose-500);color:#fff;
+  font-size:13.5px;font-weight:500;padding:11px 20px;border-radius:24px;cursor:pointer;box-shadow:0 8px 16px rgba(195,120,118,.3);}
+.wish-empty .go-menu svg{width:14px;height:14px;}
+.msg-block{padding:6px 22px 0;}
+.msg-label{font-family:"Noto Serif SC",serif;font-weight:600;font-size:15px;color:var(--ink);margin:16px 0 11px;
+  display:flex;align-items:center;gap:9px;}
+.msg-label::before{content:"";width:4px;height:15px;border-radius:3px;background:var(--rose-500);}
+.msg-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 15px 10px;box-shadow:var(--shadow-sm);}
+.msg-card textarea{width:100%;border:none;outline:none;resize:none;background:none;font-family:inherit;
+  font-size:14px;line-height:1.7;color:var(--ink);min-height:56px;}
+.msg-card textarea::placeholder{color:var(--ink-3);}
+.msg-foot{display:flex;justify-content:flex-end;font-size:11px;color:var(--ink-3);}
+.phrase-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px;}
+.phrase{background:var(--rose-50);color:var(--rose-700);font-size:12px;padding:8px 13px;border-radius:16px;cursor:pointer;
+  border:1px solid var(--rose-100);transition:background .15s;}
+.phrase:active{background:var(--rose-100);}
+
+/* ===== her message card on shop ===== */
+.her-msg{margin:14px 22px 0;display:flex;gap:13px;align-items:flex-start;
+  background:linear-gradient(135deg,#FBF0EC,#F7E6E2);border:1px solid var(--rose-100);
+  border-radius:18px;padding:15px 16px;box-shadow:var(--shadow-sm);animation:fade .4s ease;}
+.her-msg .hm-ic{width:34px;height:34px;border-radius:11px;flex:0 0 auto;background:var(--surface);color:var(--rose-500);
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);}
+.her-msg .hm-ic svg{width:18px;height:18px;}
+.her-msg .qt{font-size:14px;color:var(--ink);line-height:1.65;font-family:"Noto Serif SC",serif;}
+.her-msg .who{font-size:11.5px;color:var(--rose-700);margin-top:7px;font-weight:600;}
+
+/* ===== tab dot ===== */
+.tab-ic{position:relative;display:flex;align-items:center;justify-content:center;}
+.tab-dot{position:absolute;top:-2px;right:-7px;width:9px;height:9px;border-radius:50%;background:var(--rose-500);
+  border:2px solid rgba(252,247,240,.92);display:none;}
+.tab-dot.show{display:block;}
+
+/* ===== sent overlay ===== */
+.sent-ov{position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:30px;
+  background:radial-gradient(520px 420px at 50% 32%,#F8E7E2 0%,#FAF5EE 60%);
+  opacity:0;pointer-events:none;transition:opacity .4s;}
+.sent-ov.show{opacity:1;pointer-events:auto;}
+.sent-card{text-align:center;}
+.sent-ov.show .sent-card{animation:rise .55s .12s cubic-bezier(.2,.8,.2,1) both;}
+@keyframes rise{from{transform:translateY(14px);opacity:0;}to{transform:none;opacity:1;}}
+.env{width:108px;height:108px;border-radius:50%;margin:0 auto 24px;position:relative;
+  background:linear-gradient(150deg,#F0D6CF,#E7C5Bd);display:flex;align-items:center;justify-content:center;color:#fff;
+  box-shadow:0 18px 40px rgba(195,120,118,.4);}
+.sent-ov.show .env{animation:pop .6s cubic-bezier(.2,1.4,.4,1);}
+@keyframes pop{0%{transform:scale(.4);opacity:0;}60%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+.env svg{width:50px;height:50px;}
+.env .pulse{position:absolute;inset:0;border-radius:50%;border:2px solid var(--rose-300);}
+.sent-ov.show .env .pulse{animation:pulse 1.7s ease-out .5s infinite;}
+@keyframes pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(1.55);opacity:0;}}
+.sent-card h2{font-family:"Noto Serif SC",serif;font-weight:700;font-size:23px;color:var(--ink);}
+.sent-card p{font-size:13px;color:var(--ink-2);line-height:1.78;margin-top:12px;}
+.mail-tag{display:inline-flex;align-items:center;gap:6px;margin-top:16px;background:var(--surface);
+  border:1px solid var(--line);color:var(--ink-2);font-size:11.5px;padding:7px 13px;border-radius:20px;box-shadow:var(--shadow-sm);}
+.mail-tag svg{width:13px;height:13px;color:var(--sage-600);}
+.sent-actions{display:flex;flex-direction:column;gap:11px;margin-top:26px;align-items:center;}
+.sent-actions .btn{padding:15px;width:236px;max-width:100%;}
+</style>
+</head>
+<body>
+
+<div class="stage-title">
+  <h1>治愈点餐 · 为她下厨</h1>
+  <p>点击底部导航 / 卡片切换页面</p>
+</div>
+
+<div class="bezel">
+  <div class="phone">
+    <div class="island"></div>
+
+    <!-- STATUS BAR -->
+    <div class="statusbar" id="statusbar">
+      <div class="sb-time">9:41</div>
+      <div class="sb-right">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor" color="#3E3733"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor" color="#3E3733"><path d="M8.5 2.2c2.6 0 5 1 6.8 2.7l1.3-1.4C14.4 1.3 11.6 0 8.5 0S2.6 1.3.4 3.5l1.3 1.4C3.5 3.2 5.9 2.2 8.5 2.2z"/><path d="M8.5 5.6c1.5 0 2.9.6 3.9 1.6l1.3-1.4c-1.4-1.4-3.2-2.2-5.2-2.2s-3.8.8-5.2 2.2l1.3 1.4c1-1 2.4-1.6 3.9-1.6z"/><circle cx="8.5" cy="10" r="2"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x="1" y="1" width="21" height="10" rx="3" stroke="#3E3733" stroke-opacity=".4"/><rect x="3" y="3" width="17" height="6" rx="1.5" fill="#3E3733"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#3E3733" fill-opacity=".5"/></svg>
+      </div>
+    </div>
+
+    <!-- VIEWPORT -->
+    <div class="viewport">
+
+      <!-- ============ HOME ============ -->
+      <section class="screen active" id="home">
+        <div class="greet">
+          <div class="deco"></div>
+          <h1>晚上好，<br><span class="hl">今天想给她做点什么？</span></h1>
+          <div class="sub">用一餐饭的温度，治愈她的每一天
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>
+          </div>
+        </div>
+
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4" stroke-linecap="round"/></svg>
+          <input placeholder="搜索菜谱、食材或灵感" readonly>
+          <div class="go btn">搜索</div>
+        </div>
+
+        <div class="today" onclick="go('detail')">
+          <div class="left">
+            <div class="badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.8 6.1 20.8l1.2-6.6L2.5 9l6.6-.9z"/></svg>今日推荐</div>
+            <h3>奶油蘑菇意面</h3>
+            <div class="desc">浓郁奶香，温柔入心的治愈系意面</div>
+            <div class="metas">
+              <div class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>25分钟</div>
+              <div class="dot"></div>
+              <div class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19v-5M12 19V9M19 19V5"/></svg>简单</div>
+            </div>
+            <div class="cta">查看菜谱
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+          <div class="img">
+            <img class="food" src="images/pasta.png" alt="奶油蘑菇意面">
+          </div>
+          <div class="heart on" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div>
+        </div>
+
+        <div class="sec-head">
+          <div class="sec-title">治愈菜单</div>
+          <div class="sec-more" onclick="go('menu')">查看全部 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+        <div class="hscroll">
+          <div class="dish" onclick="go('detail')">
+            <div class="img"><img class="food" src="images/wings.png" alt="可乐鸡翅"><button class="add" data-wish="wings" onclick="toggleWish('wings',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+            <div class="body"><h4>可乐鸡翅</h4><div class="tagrow"><span class="chip rose">超级下饭</span></div><div class="metas"><div class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>30分钟</div><div class="dot"></div><div class="meta">简单</div></div></div>
+          </div>
+          <div class="dish" onclick="go('detail')">
+            <div class="img"><img class="food" src="images/salmon.png" alt="香煎三文鱼"><button class="add" data-wish="salmon" onclick="toggleWish('salmon',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+            <div class="body"><h4>香煎三文鱼</h4><div class="tagrow"><span class="chip sage">高蛋白低脂</span></div><div class="metas"><div class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>20分钟</div><div class="dot"></div><div class="meta">简单</div></div></div>
+          </div>
+          <div class="dish" onclick="go('detail')">
+            <div class="img"><img class="food" src="images/tomato.png" alt="番茄炒蛋"><button class="add" data-wish="tomato" onclick="toggleWish('tomato',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+            <div class="body"><h4>番茄炒蛋</h4><div class="tagrow"><span class="chip honey">经典家常</span></div><div class="metas"><div class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>15分钟</div><div class="dot"></div><div class="meta">简单</div></div></div>
+          </div>
+          <div class="dish" onclick="go('detail')">
+            <div class="img"><img class="food" src="images/cake.png" alt="熔岩巧克力蛋糕"><button class="add" data-wish="cake" onclick="toggleWish('cake',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+            <div class="body"><h4>熔岩巧克力蛋糕</h4><div class="tagrow"><span class="chip rose">甜蜜治愈</span></div><div class="metas"><div class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>35分钟</div><div class="dot"></div><div class="meta">中等</div></div></div>
+          </div>
+        </div>
+
+        <div class="sec-head">
+          <div class="sec-title">根据她的心情</div>
+          <div class="sec-more">换一换 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M21 4v4h-4M3 20v-4h4"/></svg></div>
+        </div>
+        <div class="moods">
+          <div class="mood m1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 20A7 7 0 0 1 4 13C4 7 11 3 20 3c0 8-3 14-9 14z"/><path d="M11 20c0-4 2-7 5-9" stroke-linecap="round"/></svg>想吃清淡<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+          <div class="mood m2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>想被哄<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+          <div class="mood m3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>下班很累<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+          <div class="mood m4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 11l1.5 9h11L19 11"/><path d="M4 11h16M8 11a4 4 0 0 1 8 0" stroke-linecap="round"/><path d="M12 4v2" stroke-linecap="round"/></svg>想吃甜一点<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+        <div class="pad-bottom"></div>
+      </section>
+
+      <!-- ============ DETAIL ============ -->
+      <section class="screen" id="detail">
+        <div class="navbar">
+          <div class="nav-ic" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></div>
+          <div class="title">菜品详情</div>
+          <div class="nav-right">
+            <div class="nav-ic" onclick="toastMsg('已收藏 ♥')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div>
+            <div class="nav-ic" onclick="toastMsg('分享给她 →')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></div>
+          </div>
+        </div>
+
+        <div class="detail-hero">
+          <img class="food" src="images/pasta.png" alt="奶油蘑菇意面">
+        </div>
+
+        <div class="detail-sheet">
+          <div class="detail-top">
+            <h2>奶油蘑菇意面</h2>
+            <div class="love"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>95%</div>
+          </div>
+          <p class="detail-desc">浓郁奶香包裹每一根意面，蘑菇的鲜美与黑胡椒的微辛 <b>温柔治愈</b>，让她从心底感到满足。</p>
+
+          <div class="stats">
+            <div class="stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg><div class="v">25分钟</div><div class="k">烹饪时间</div></div>
+            <div class="stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 19v-5M12 19V9M19 19V5"/></svg><div class="v">简单</div><div class="k">难易程度</div></div>
+            <div class="stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6" stroke-linecap="round"/></svg><div class="v">2人份</div><div class="k">适合人数</div></div>
+          </div>
+
+          <div class="sec-head" style="margin-left:0;margin-right:0;">
+            <div class="sec-title">食材准备</div>
+            <div class="sec-more">2人份 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="ing-grid">
+            <div class="ing"><img class="thumb" src="images/ing_pasta.png" alt="意面"><div><div class="nm">意面</div><div class="qt">200g</div></div><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div></div>
+            <div class="ing"><img class="thumb" src="images/ing_mushroom.png" alt="蘑菇"><div><div class="nm">蘑菇</div><div class="qt">150g</div></div><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div></div>
+            <div class="ing"><img class="thumb" src="images/ing_cream.png" alt="淡奶油"><div><div class="nm">淡奶油</div><div class="qt">150ml</div></div><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div></div>
+            <div class="ing"><img class="thumb" src="images/ing_garlic.png" alt="蒜末"><div><div class="nm">蒜末</div><div class="qt">1大勺</div></div><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div></div>
+            <div class="ing"><img class="thumb" src="images/ing_pepper.png" alt="黑胡椒"><div><div class="nm">黑胡椒</div><div class="qt">适量</div></div><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div></div>
+            <div class="ing"><img class="thumb" src="images/ing_parsley.png" alt="欧芹"><div><div class="nm">欧芹</div><div class="qt">适量</div></div><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div></div>
+          </div>
+          <div class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4" stroke-linecap="round"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg>点击食材可查看小贴士</div>
+
+          <div class="sec-head" style="margin-left:0;margin-right:0;">
+            <div class="sec-title">做法步骤</div>
+          </div>
+          <div class="steps">
+            <div class="step"><div class="no">1</div><div class="tx">水中加盐，放入意面煮 8–10 分钟至八分熟，捞出沥干备用。</div><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 11h14a7 7 0 0 1-14 0z"/><path d="M3 11h18M9 5c0-1 .6-2 1.5-2M13 5c0-1 .6-2 1.5-2"/></svg></div>
+            <div class="step"><div class="no">2</div><div class="tx">热锅融化黄油，放入蒜末爆香，加入蘑菇片翻炒至软化出水。</div><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="13" r="6"/><path d="M16 13h6" stroke-linecap="round"/></svg></div>
+            <div class="step"><div class="no">3</div><div class="tx">倒入淡奶油，加入黑胡椒和少许盐，煮至微微浓稠后，放入意面拌匀。</div><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c0-2 6-2 6 0" stroke-linecap="round"/></svg></div>
+          </div>
+        </div>
+
+        <div class="actionbar">
+          <button class="btn btn-ghost" style="flex:1;padding:15px;" onclick="go('shop')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h4" stroke-linecap="round"/></svg>生成采购单</button>
+          <button class="btn btn-primary" id="detailAdd" style="flex:1.5;padding:15px;" onclick="toggleWish('pasta',event)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg><span>加入心愿单</span></button>
+        </div>
+      </section>
+
+      <!-- ============ SHOP ============ -->
+      <section class="screen" id="shop">
+        <div class="shop-head">
+          <div class="deco"></div>
+          <h1>今晚准备 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></h1>
+          <div class="sub">用心准备，治愈她的一天</div>
+        </div>
+
+        <div class="tonight">
+          <div class="cup"></div>
+          <div class="t-top"><h3>她今晚想吃</h3><span class="chip rose" id="tonightCount">2 道菜</span></div>
+          <div id="tonightDishes"></div>
+          <div class="t-foot">
+            <div class="l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg><span id="tonightTime">预计用时 45分钟</span></div>
+            <div class="r">她为你点的温柔一餐 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div>
+          </div>
+        </div>
+        <div class="her-msg" id="herMsg" style="display:none;">
+          <div class="hm-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h4v6c0 2.2-1.5 3.7-4 4v-2c1.2-.3 2-1 2-2H7V7zm8 0h4v6c0 2.2-1.5 3.7-4 4v-2c1.2-.3 2-1 2-2h-2V7z"/></svg></div>
+          <div class="hm-body"><div class="qt">“ ”</div><div class="who">— 她悄悄说</div></div>
+        </div>
+
+        <div class="sec-head">
+          <div class="sec-title">采购清单</div>
+          <div class="sec-more" onclick="clearChecked()">清空已勾选 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/></svg></div>
+        </div>
+        <div class="list-card">
+          <div class="grp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 20A7 7 0 0 1 4 13C4 7 11 3 20 3c0 8-3 14-9 14z"/></svg>主食<svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          <div class="li done" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">意大利面</div><div class="qt">100g</div></div>
+          <div class="li" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">黄油</div><div class="qt">20g</div></div>
+
+          <div class="grp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22c5-4 7-8 7-11a7 7 0 0 0-14 0c0 3 2 7 7 11z"/><path d="M12 3v8" stroke-linecap="round"/></svg>蔬菜<svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          <div class="li done" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">口蘑</div><div class="qt">150g</div></div>
+          <div class="li done" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">洋葱</div><div class="qt">1/2个</div></div>
+          <div class="li" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">芦笋</div><div class="qt">100g</div></div>
+
+          <div class="grp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6v3l1 2v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V8l1-2z"/><path d="M8 12h8" stroke-linecap="round"/></svg>调味<svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          <div class="li done" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">淡奶油</div><div class="qt">100ml</div></div>
+          <div class="li" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">黑胡椒</div><div class="qt">适量</div></div>
+          <div class="li done" onclick="toggleLi(this)"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg></div><div class="nm">盐</div><div class="qt">适量</div></div>
+        </div>
+
+        <div class="sec-head"><div class="sec-title">做饭时间安排</div></div>
+        <div class="timeline">
+          <div class="tl a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 11h14a7 7 0 0 1-14 0z"/><path d="M3 11h18" stroke-linecap="round"/></svg><div class="tm">18:00</div><div class="nm">备菜</div><div class="ds">清洗切配食材</div></div>
+          <div class="tl-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M14 7l5 5-5 5"/></svg></div>
+          <div class="tl b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="13" r="6"/><path d="M16 13h6" stroke-linecap="round"/></svg><div class="tm">18:20</div><div class="nm">开始烹饪</div><div class="ds">烹饪两道菜</div></div>
+          <div class="tl-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M14 7l5 5-5 5"/></svg></div>
+          <div class="tl c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 14h16a8 8 0 0 0-16 0z"/><path d="M3 18h18" stroke-linecap="round"/></svg><div class="tm">18:50</div><div class="nm">装盘</div><div class="ds">摆盘与点缀</div></div>
+        </div>
+
+        <div class="actionbar">
+          <button class="btn btn-ghost" style="flex:1;padding:15px;color:var(--rose-700);border-color:var(--rose-100);" onclick="toastMsg('已生成分享卡片 →')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 10.5l7-4M8.5 13.5l7 4"/></svg>分享菜单</button>
+          <button class="btn btn-primary" style="flex:1.5;padding:15px;" onclick="toastMsg('开始为她下厨 ♥')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 21h10M8 21v-4M16 21v-4" stroke-linecap="round"/><path d="M6 8a6 6 0 0 1 12 0c0 3-2 5-2 9H8c0-4-2-6-2-9z"/></svg>开始做饭</button>
+        </div>
+      </section>
+
+      <!-- ============ MENU LIST ============ -->
+      <section class="screen" id="menu">
+        <div class="shop-head" style="padding-bottom:0;">
+          <h1 style="font-size:28px;">治愈菜单</h1>
+          <div class="sub">为她精选的每一道温柔料理</div>
+        </div>
+        <div style="height:14px;"></div>
+        <div class="menu-list">
+          <div class="ml" onclick="go('detail')"><img class="thumb" src="images/pasta.png" alt="奶油蘑菇意面"><div style="flex:1;"><h4>奶油蘑菇意面</h4><div class="metas"><span class="chip rose">招牌推荐</span><div class="meta">25分钟</div></div></div><button class="add" data-wish="pasta" onclick="toggleWish('pasta',event)"></button><div class="heart on" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+          <div class="ml" onclick="go('detail')"><img class="thumb" src="images/wings.png" alt="可乐鸡翅"><div style="flex:1;"><h4>可乐鸡翅</h4><div class="metas"><span class="chip rose">超级下饭</span><div class="meta">30分钟</div></div></div><button class="add" data-wish="wings" onclick="toggleWish('wings',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+          <div class="ml" onclick="go('detail')"><img class="thumb" src="images/salmon.png" alt="香煎三文鱼"><div style="flex:1;"><h4>香煎三文鱼</h4><div class="metas"><span class="chip sage">高蛋白低脂</span><div class="meta">20分钟</div></div></div><button class="add" data-wish="salmon" onclick="toggleWish('salmon',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+          <div class="ml" onclick="go('detail')"><img class="thumb" src="images/tomato.png" alt="番茄炒蛋"><div style="flex:1;"><h4>番茄炒蛋</h4><div class="metas"><span class="chip honey">经典家常</span><div class="meta">15分钟</div></div></div><button class="add" data-wish="tomato" onclick="toggleWish('tomato',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+          <div class="ml" onclick="go('detail')"><img class="thumb" src="images/cake.png" alt="熔岩巧克力蛋糕"><div style="flex:1;"><h4>熔岩巧克力蛋糕</h4><div class="metas"><span class="chip rose">甜蜜治愈</span><div class="meta">35分钟</div></div></div><button class="add" data-wish="cake" onclick="toggleWish('cake',event)"></button><div class="heart" onclick="toggleHeart(event,this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div></div>
+        </div>
+        <div class="pad-bottom"></div>
+      </section>
+
+      <!-- ============ MINE ============ -->
+      <section class="screen" id="mine">
+        <div class="mine-wrap">
+          <div class="mine-av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-4 3.1-7 7-7s7 3 7 7" stroke-linecap="round"/></svg></div>
+          <h3>为她下厨的人</h3>
+          <div class="sub" style="color:var(--ink-2);font-size:12.5px;margin-top:6px;">已连续为她做饭 <b style="color:var(--rose-700);">12</b> 天</div>
+          <div class="mine-row">
+            <div><div class="v">28</div><div class="k">做过的菜</div></div>
+            <div><div class="v">12</div><div class="k">连续天数</div></div>
+            <div><div class="v">96%</div><div class="k">她的好评</div></div>
+          </div>
+          <div class="mine-card">
+            <div class="mine-li"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>她的收藏夹<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            <div class="mine-li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16" stroke-linecap="round"/></svg>做饭日历<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            <div class="mine-li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.8 6.1 20.8l1.2-6.6L2.5 9l6.6-.9z"/></svg>她的口味偏好<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            <div class="mine-li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L16 2H8l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 3 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1c.6.5 1.3.9 2 1.2L8 22h8l.5-2.6c.7-.3 1.4-.7 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg>设置<svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+          </div>
+        </div>
+        <div class="pad-bottom"></div>
+      </section>
+
+      <!-- ============ WISH ============ -->
+      <section class="screen" id="wish">
+        <div class="navbar">
+          <div class="nav-ic" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></div>
+          <div class="title">我的心愿单</div>
+          <div class="nav-ic" onclick="clearWish()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/></svg></div>
+        </div>
+        <div class="wish-head">
+          <h1>今晚想吃这些 ♥</h1>
+          <div class="sub">选好菜，写句话，悄悄提醒他来做</div>
+        </div>
+        <div class="wish-list" id="wishList"></div>
+        <div class="msg-block" id="msgBlock">
+          <div class="msg-label">给他留一句话</div>
+          <div class="msg-card">
+            <textarea id="wishMsg" maxlength="60" placeholder="今天有点累，好想吃你做的饭呀～" oninput="updateMsgCount()"></textarea>
+            <div class="msg-foot"><span id="msgCount">0/60</span></div>
+          </div>
+          <div class="phrase-row">
+            <span class="phrase" onclick="fillMsg(this)">今天好累，想吃你做的饭 🥺</span>
+            <span class="phrase" onclick="fillMsg(this)">辛苦啦，等你回家 ♥</span>
+            <span class="phrase" onclick="fillMsg(this)">想被你哄一下嘛～</span>
+            <span class="phrase" onclick="fillMsg(this)">做给我吃好不好</span>
+          </div>
+        </div>
+        <div class="actionbar" id="wishAction">
+          <button class="btn btn-primary" style="flex:1;padding:16px;" onclick="sendWish()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>送出 · 悄悄提醒他</button>
+        </div>
+        <div class="pad-bottom"></div>
+      </section>
+
+    </div><!-- /viewport -->
+
+    <div class="wishbar" id="wishbar" onclick="go('wish')">
+      <div class="avs"></div>
+      <div class="tx">已选 <b>0</b> 道菜<small>写句话，提醒他来做 ♥</small></div>
+      <div class="send">去送出 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>
+
+    <div class="sent-ov" id="sentOv">
+      <div class="sent-card">
+        <div class="env"><span class="pulse"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div>
+        <h2>已悄悄提醒他 ♥</h2>
+        <p>你的心愿单已经送到他那里啦～<br>他会收到提醒，看看你今晚想吃什么。</p>
+        <div class="mail-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6" stroke-linecap="round"/></svg>已通过邮件通知他</div>
+        <div class="sent-actions">
+          <button class="btn btn-primary" onclick="viewCookSide()">看看他会收到的</button>
+          <button class="btn btn-ghost" onclick="closeSent('home')">回到首页</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- TAB BAR -->
+    <div class="tabbar">
+      <div class="tabs">
+        <div class="tab active" data-s="home" onclick="go('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9" stroke-linecap="round"/></svg><span>首页</span>
+        </div>
+        <div class="tab" data-s="menu" onclick="go('menu')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 13h16a8 8 0 0 1-16 0z"/><path d="M3 13h18" stroke-linecap="round"/><path d="M9 8c0-1.5 6-1.5 6 0" stroke-linecap="round"/></svg><span>菜单</span>
+        </div>
+        <div class="tab" data-s="shop" onclick="go('shop')">
+          <div class="tab-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h4" stroke-linecap="round"/></svg><span class="tab-dot" id="shopDot"></span></div><span>采购单</span>
+        </div>
+        <div class="tab" data-s="mine" onclick="go('mine')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-4 3.1-7 7-7s7 3 7 7" stroke-linecap="round"/></svg><span>我的</span>
+        </div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+
+  </div><!-- /phone -->
+</div><!-- /bezel -->
+
+<script>
+const DISHES={
+  pasta:{name:'奶油蘑菇意面',img:'images/pasta.png',time:25,tag:'招牌推荐'},
+  wings:{name:'可乐鸡翅',img:'images/wings.png',time:30,tag:'超级下饭'},
+  salmon:{name:'香煎三文鱼',img:'images/salmon.png',time:20,tag:'高蛋白低脂'},
+  tomato:{name:'番茄炒蛋',img:'images/tomato.png',time:15,tag:'经典家常'},
+  cake:{name:'熔岩巧克力蛋糕',img:'images/cake.png',time:35,tag:'甜蜂治愈'}
+};
+const ICO_PLUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg>';
+const ICO_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7"/></svg>';
+const ICO_CLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>';
+
+let wish=[],sent=null;
+function loadState(){try{const s=JSON.parse(localStorage.getItem('zydc_wish')||'{}');wish=Array.isArray(s.wish)?s.wish.filter(id=>DISHES[id]):[];sent=s.sent||null;}catch(e){wish=[];sent=null;}}
+function saveState(){try{localStorage.setItem('zydc_wish',JSON.stringify({wish,sent}));}catch(e){}}
+
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(name);
+  el.classList.add('active');el.scrollTop=0;
+  el.classList.remove('nav-anim');void el.offsetWidth;el.classList.add('nav-anim');
+  setTimeout(()=>el.classList.remove('nav-anim'),420);
+  const tabName=(name==='detail')?'menu':name;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.s===tabName));
+  if(name==='shop'){renderShop();showShopBadge(false);}
+  if(name==='wish'){renderWishScreen();updateMsgCount();}
+  refreshWishBar();
+}
+function toggleHeart(e,el){e.stopPropagation();el.classList.toggle('on');}
+function toggleLi(el){el.classList.toggle('done');}
+function clearChecked(){document.querySelectorAll('#shop .li.done').forEach(l=>l.classList.remove('done'));toastMsg('已清空勾选');}
+let tT;
+function toastMsg(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),1600);}
+
+/* ===== wish list state ===== */
+function toggleWish(id,e){if(e&&e.stopPropagation)e.stopPropagation();const i=wish.indexOf(id);const adding=i<0;if(adding)wish.push(id);else wish.splice(i,1);saveState();refreshWishUI();toastMsg(adding?'已加入心愿单 ♥':'已移出心愿单');}
+function clearWish(){if(wish.length===0)return;wish=[];saveState();refreshWishUI();toastMsg('已清空心愿单');}
+
+function refreshWishButtons(){
+  document.querySelectorAll('[data-wish]').forEach(b=>{const on=wish.includes(b.dataset.wish);b.classList.toggle('in',on);b.innerHTML=on?ICO_CHECK:ICO_PLUS;});
+  const da=document.getElementById('detailAdd');if(da){const on=wish.includes('pasta');const sp=da.querySelector('span');if(sp)sp.textContent=on?'已加入心愿单':'加入心愿单';da.style.opacity=on?'.86':'1';}
+}
+function refreshWishBar(){
+  const bar=document.getElementById('wishbar');if(!bar)return;
+  const cur=document.querySelector('.screen.active');const id=cur?cur.id:'';
+  const allowed=(id==='home'||id==='menu'||id==='mine');
+  const ovShown=document.getElementById('sentOv').classList.contains('show');
+  bar.classList.toggle('show',wish.length>0&&allowed&&!ovShown);
+  if(wish.length){
+    bar.querySelector('.avs').innerHTML=wish.slice(0,3).map(i=>'<img src="'+DISHES[i].img+'" alt="">').join('');
+    bar.querySelector('.tx').innerHTML='已选 <b>'+wish.length+'</b> 道菜<small>写句话，提醒他来做 ♥</small>';
+  }
+}
+function renderWishScreen(){
+  const list=document.getElementById('wishList');if(!list)return;
+  const mb=document.getElementById('msgBlock'),ab=document.getElementById('wishAction');
+  if(wish.length===0){
+    list.innerHTML='<div class="wish-empty"><div class="ill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.7-9.2C.9 8.4 2.6 5 5.9 5c2 0 3.3 1.2 4.1 2.4C10.8 6.2 12.1 5 14.1 5c3.3 0 5 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg></div><h3>还没选菜呀</h3><p>去菜单里挑几道想吃的，<br>写句话一起送给他 ♥</p><div class="go-menu" onclick="go(\'menu\')">去看看菜单 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div></div>';
+    if(mb)mb.style.display='none';if(ab)ab.style.display='none';
+  }else{
+    if(mb)mb.style.display='';if(ab)ab.style.display='';
+    list.innerHTML=wish.map(function(id){var d=DISHES[id];return '<div class="wish-item"><img class="thumb" src="'+d.img+'" alt="'+d.name+'"><div class="wi-body"><h4>'+d.name+'</h4><div class="metas"><span class="chip rose">'+d.tag+'</span><div class="meta">'+ICO_CLOCK+d.time+'分钟</div></div></div><button class="rm" onclick="toggleWish(\''+id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';}).join('');
+  }
+}
+function refreshWishUI(){refreshWishButtons();refreshWishBar();renderWishScreen();}
+function fillMsg(el){const t=document.getElementById('wishMsg');t.value=el.textContent.trim();updateMsgCount();}
+function updateMsgCount(){const t=document.getElementById('wishMsg');if(t)document.getElementById('msgCount').textContent=t.value.length+'/60';}
+
+function sendWish(){
+  if(wish.length===0){toastMsg('还没选菜呀～');return;}
+  const msg=document.getElementById('wishMsg').value.trim();
+  sent={dishes:wish.slice(),message:msg};
+  wish=[];saveState();
+  refreshWishUI();renderShop();showShopBadge(true);
+  document.getElementById('sentOv').classList.add('show');
+}
+function closeSent(dest){document.getElementById('sentOv').classList.remove('show');if(dest)go(dest);else refreshWishBar();}
+function viewCookSide(){document.getElementById('sentOv').classList.remove('show');go('shop');}
+
+function showShopBadge(on){const d=document.getElementById('shopDot');if(d)d.classList.toggle('show',on);}
+function renderShop(){
+  const data=(sent&&sent.dishes.length)?sent.dishes:['pasta','salmon'];
+  const c=document.getElementById('tonightDishes');
+  if(c)c.innerHTML=data.map(function(id){var d=DISHES[id];return '<div class="t-dish"><img class="thumb" src="'+d.img+'" alt="'+d.name+'"><div><div class="nm">'+d.name+'</div><div class="tm">'+ICO_CLOCK+d.time+'分钟</div></div></div>';}).join('');
+  const cnt=document.getElementById('tonightCount');if(cnt)cnt.textContent=data.length+' 道菜';
+  const tot=data.reduce(function(s,id){return s+DISHES[id].time;},0);
+  const tt=document.getElementById('tonightTime');if(tt)tt.textContent='预计用时 '+tot+'分钟';
+  const hm=document.getElementById('herMsg');
+  if(hm){if(sent&&sent.message){hm.style.display='';hm.querySelector('.qt').textContent='“'+sent.message+'”';}else{hm.style.display='none';}}
+}
+
+loadState();refreshWishUI();renderShop();
+</script>
+</body>
+</html>

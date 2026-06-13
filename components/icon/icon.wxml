@@ -1,0 +1,3 @@
+<!-- icon —— 把 utils/icons 的 SVG 注入颜色后以 base64 image 渲染。
+     用法：<icon name="clock" color="{{C.ink2}}" size="28" /> （size 单位 rpx） -->
+<image wx:if="{{src}}" class="icon" src="{{src}}" mode="scaleToFill" style="width:{{size}}rpx;height:{{size}}rpx;" />

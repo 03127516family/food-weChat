@@ -1,0 +1,42 @@
+<!-- 我的 mine -->
+<view class="mine-page">
+  <status-bar />
+
+  <view class="mine-wrap">
+    <view class="mine-av"><icon name="user" color="{{C.white}}" size="84" /></view>
+    <view class="mine-name">{{p.name}}</view>
+    <view class="mine-streak">{{p.streakText}} <text class="hl">{{p.streakDays}}</text> 天</view>
+
+    <view class="mine-row">
+      <view wx:for="{{p.stats}}" wx:key="k">
+        <view class="v">{{item.v}}</view>
+        <view class="k">{{item.k}}</view>
+      </view>
+    </view>
+
+    <!-- 做饭的人：授权接收她的点餐提醒（订阅消息） -->
+    <view class="mine-subscribe {{subscribed ? 'on' : ''}}" bindtap="onSubscribe">
+      <icon name="bell" color="{{subscribed ? C.sage600 : C.white}}" size="34" />
+      <text>{{subscribed ? '已开启 · 她下单会提醒你' : '开启她的点餐提醒'}}</text>
+    </view>
+
+    <view class="mine-card">
+      <view
+        wx:for="{{p.menu}}"
+        wx:key="label"
+        class="mine-li"
+        data-i="{{index}}"
+        bindtap="onMenuTap"
+      >
+        <icon name="{{item.icon}}" color="{{C.rose500}}" size="38" />
+        <text class="lb">{{item.label}}</text>
+        <icon class="ar" name="chevron-right" color="{{C.ink3}}" size="32" />
+      </view>
+    </view>
+  </view>
+
+  <view class="tabbar-safe"></view>
+</view>
+
+<wish-bar />
+<view class="toast {{toast.show ? 'show' : ''}}">{{toast.text}}</view>

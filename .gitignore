@@ -1,0 +1,15 @@
+# 依赖（云函数 node_modules 由云端安装，不入库）
+node_modules/
+**/node_modules/
+
+# 微信开发者工具构建产物
+**/miniprogram_npm/
+**/.tea/
+*.tmp
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/

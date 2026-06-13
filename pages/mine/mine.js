@@ -1,0 +1,41 @@
+// 我的 —— 头像 / 名称 / 连续天数 / 统计 / 菜单列表。数据来自 /mock。
+// 这里也是「做饭的人」授权接收订阅消息提醒的入口。
+const mock = require('../../mock/index');
+const colors = require('../../utils/colors');
+const toast = require('../../utils/toast');
+const notify = require('../../utils/notify');
+
+Page({
+  data: {
+    C: colors,
+    p: mock.PROFILE,
+    subscribed: false,
+    toast: { show: false, text: '' },
+  },
+
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setSelected(3);
+    }
+  },
+
+  onMenuTap(e) {
+    toast.show(this, this.data.p.menu[e.currentTarget.dataset.i].label);
+  },
+
+  // 做饭的人点一下：授权订阅 + 记录 openid 到云端
+  onSubscribe() {
+    notify.subscribeAsCook().then((r) => {
+      if (r.ok) {
+        this.setData({ subscribed: true });
+        toast.show(this, '已开启，她下单会提醒你 ♥');
+      } else if (r.reason === 'NOT_CONFIGURED') {
+        toast.show(this, '请先在 cloud-config 配置云开发');
+      } else if (r.reason === 'REJECTED') {
+        toast.show(this, '你拒绝了授权');
+      } else {
+        toast.show(this, '开启失败，请重试');
+      }
+    });
+  },
+});
