@@ -1,13 +1,14 @@
 /* 心愿单 wish —— 专属样式（共享原子类见 shared.wxss） */
 .wish-page {
-  min-height: 100vh;
+  min-height: 100vh; position: relative;
   background:
     radial-gradient(840rpx 640rpx at 100% -4%, #F6E4DF 0%, transparent 62%),
     var(--cream);
 }
+.wish-art { width: 376rpx; height: 260rpx; }
 
 /* ---- 头部 ---- */
-.wish-head { padding: 16rpx 44rpx 0; }
+.wish-head { padding: 16rpx 44rpx 0; position: relative; z-index: 1; }
 .wish-h1 { font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 54rpx; }
 .wish-head .sub { font-size: 25rpx; color: var(--ink-2); margin-top: 16rpx; letter-spacing: 0.02em; }
 

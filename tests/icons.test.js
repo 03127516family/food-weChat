@@ -22,6 +22,7 @@ function collectIconNames() {
   });
   Object.keys(recipes.GROUP_ICON).forEach((g) => names.push(recipes.GROUP_ICON[g]));
   shopping.TIMELINE.forEach((t) => names.push(t.icon));
+  PROFILE.stats.forEach((s) => names.push(s.icon));
   PROFILE.menu.forEach((m) => names.push(m.icon));
   copy.HOME.moods.forEach((m) => names.push(m.icon));
   return names;
@@ -35,7 +36,14 @@ test('mock 引用的所有图标均已注册', () => {
 
 // 页面/组件里写死引用的关键图标，确保不会漏
 test('核心交互图标存在', () => {
-  ['heart', 'plus', 'check', 'close', 'trash', 'send', 'mail', 'chevron-right', 'chevron-left', 'clock', 'level', 'star', 'search', 'home', 'bowl', 'clipboard', 'user', 'quote', 'chef', 'share', 'share-nodes', 'arrow-right'].forEach((n) => {
+  ['heart', 'heart-line', 'plus', 'check', 'close', 'trash', 'send', 'mail', 'chevron-right', 'chevron-left', 'chevron-down', 'clock', 'level', 'star', 'search', 'home', 'clipboard', 'user', 'quote', 'chef', 'share', 'arrow-right', 'person', 'leaf', 'leaf-plain', 'bell'].forEach((n) => {
     ok(!!ICONS[n], '缺少核心图标: ' + n);
+  });
+});
+
+// 新版页面（菜谱筛选 / 今晚 / 做饭 / 我的）写死引用的图标
+test('新版页面交互图标存在', () => {
+  ['filter', 'cart', 'wheat', 'play', 'pause', 'skip-back', 'skip-fwd', 'utensils', 'bookmark', 'taste', 'flower', 'info', 'bulb'].forEach((n) => {
+    ok(!!ICONS[n], '缺少新版图标: ' + n);
   });
 });

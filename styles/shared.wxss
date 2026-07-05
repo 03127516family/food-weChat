@@ -72,6 +72,30 @@
   display: inline-flex; align-items: center; justify-content: center; gap: 16rpx;
 }
 
+/* ---------- 搜索框（home / menu 共用；margin 由页面自定） ---------- */
+.search {
+  display: flex; align-items: center; gap: 22rpx;
+  background: var(--surface); border-radius: 64rpx;
+  padding: 16rpx 16rpx 16rpx 36rpx; box-shadow: 0 18rpx 44rpx rgba(180, 140, 118, 0.16);
+}
+.search .field { flex: 1; font-size: 28rpx; color: var(--ink); background: none; }
+.search .ph-text { color: var(--ink-3); }
+.search .go {
+  background: var(--rose-500); color: #fff; font-size: 28rpx;
+  padding: 22rpx 46rpx; border-radius: 48rpx; font-weight: 500;
+}
+
+/* ---------- 吸顶：安全区 + 搜索框（home / menu 共用） ----------
+   页面级滚动下用 position:sticky（WebView 渲染器支持）。
+   .safe-sticky 钉住状态栏安全区（不透明奶油底，遮住下方滚动内容）；
+   .search-sticky 钉在状态栏下方（top 由页面按 statusBarHeight 内联设置），
+   顶部留白让搜索框落在状态栏之下，底部渐隐过渡。 */
+.safe-sticky { position: sticky; top: 0; z-index: 26; background: var(--cream); }
+.search-sticky {
+  position: sticky; z-index: 25; padding: 18rpx 0 18rpx;
+  background: linear-gradient(to bottom, var(--cream) 0%, var(--cream) 74%, rgba(250, 245, 238, 0) 100%);
+}
+
 /* ---------- 底部操作条 ---------- */
 .actionbar {
   position: sticky; bottom: 0; display: flex; gap: 24rpx;
@@ -129,6 +153,38 @@
     radial-gradient(46% 46% at 32% 70%, #E6D2B6 0%, transparent 60%);
   filter: blur(4rpx); opacity: 0.82;
 }
+
+/* ---------- 顶部页标题（tab 页 home 外的 menu/tonight/mine 用） ---------- */
+.page-top {
+  height: 108rpx; display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.page-top .pt-title {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 600; font-size: 36rpx; color: var(--ink);
+}
+
+/* ---------- 照片花朵页头装饰（右上角柔和淡出）
+   注意：必须用 <image> 元素——WXSS background-image 不支持本地图片。 ---------- */
+.hdr-art {
+  position: absolute; top: 0; right: 0; width: 412rpx; height: 296rpx;
+  z-index: 0; pointer-events: none; opacity: 0.9;
+  -webkit-mask-image: linear-gradient(to left, #000 38%, transparent 92%);
+  mask-image: linear-gradient(to left, #000 38%, transparent 92%);
+}
+
+/* ---------- 爱心横幅（home / mine 共用） ---------- */
+.love-banner {
+  margin: 44rpx; border-radius: var(--r-card);
+  background: linear-gradient(135deg, #FBF1E9, #F6E7DF); /* 一次性暖玫瑰渐变 */
+  border: 1px solid var(--rose-100);
+  padding: 24rpx 36rpx 24rpx 12rpx;
+  display: flex; align-items: center; gap: 12rpx; box-shadow: var(--shadow-sm);
+}
+.love-banner .lb-img { width: 184rpx; height: 140rpx; flex: 0 0 auto; mix-blend-mode: multiply; }
+.love-banner .lb-tx { flex: 1; }
+.love-banner .lb-title { font-family: "Noto Serif SC", "Songti SC", serif; font-size: 32rpx; color: #9A7268; } /* 一次性暖玫瑰 */
+.love-banner .lb-sub { font-size: 23rpx; color: var(--ink-2); margin-top: 12rpx; letter-spacing: 0.02em; line-height: 1.5; }
+.love-banner .lh { flex: 0 0 auto; margin-left: 4rpx; }
 
 /* ---------- 底部留白 ---------- */
 .pad-bottom { height: 48rpx; }

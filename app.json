@@ -2,9 +2,10 @@
   "pages": [
     "pages/home/home",
     "pages/menu/menu",
-    "pages/shop/shop",
+    "pages/tonight/tonight",
     "pages/mine/mine",
     "pages/detail/detail",
+    "pages/cook/cook",
     "pages/wish/wish"
   ],
   "window": {
@@ -24,8 +25,8 @@
     "borderStyle": "white",
     "list": [
       { "pagePath": "pages/home/home", "text": "首页" },
-      { "pagePath": "pages/menu/menu", "text": "菜单" },
-      { "pagePath": "pages/shop/shop", "text": "采购单" },
+      { "pagePath": "pages/menu/menu", "text": "菜谱" },
+      { "pagePath": "pages/tonight/tonight", "text": "今晚" },
       { "pagePath": "pages/mine/mine", "text": "我的" }
     ]
   },

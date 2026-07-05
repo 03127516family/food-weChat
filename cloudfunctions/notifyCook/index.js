@@ -33,7 +33,7 @@ exports.main = async (event) => {
     await cloud.openapi.subscribeMessage.send({
       touser,
       templateId,
-      page: 'pages/shop/shop',
+      page: 'pages/tonight/tonight',
       miniprogramState, // 由前端按当前版本传入：developer/trial/formal
       lang: 'zh_CN',
       // 模板字段：thing2=点餐内容，time4=点餐时间

@@ -19,6 +19,7 @@ const ICONS = {
   'arrow-right': `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M14 7l5 5-5 5"/></svg>`,
   search: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4" stroke-linecap="round"/></svg>`,
   refresh: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M21 4v4h-4M3 20v-4h4"/></svg>`,
+  filter: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 5h18M6 12h12M10 19h4"/></svg>`,
 
   // —— 操作 ——
   plus: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg>`,
@@ -63,6 +64,21 @@ const ICONS = {
   'tl-prep': `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 11h14a7 7 0 0 1-14 0z"/><path d="M3 11h18" stroke-linecap="round"/></svg>`,
   'tl-cook': `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="13" r="6"/><path d="M16 13h6" stroke-linecap="round"/></svg>`,
   'tl-plate': `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 14h16a8 8 0 0 0-16 0z"/><path d="M3 18h18" stroke-linecap="round"/></svg>`,
+
+  // —— 做饭页 控制 ——
+  play: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>`,
+  pause: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.4"/><rect x="14" y="5" width="4" height="14" rx="1.4"/></svg>`,
+  'skip-back': `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>`,
+  'skip-fwd': `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"/></svg>`,
+  utensils: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 3v7M4 3v3a2 2 0 0 0 4 0V3M6 10v11"/><path d="M16 3c-1.5 1-2 3-2 6s.5 4 2 4v8"/></svg>`,
+
+  // —— 采购 / 我的 ——
+  cart: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M3 4h2l2 12h11"/></svg>`,
+  wheat: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3c4 2 5 6 3 10M12 3c-4 2-5 6-3 10M12 13v8"/></svg>`,
+  bookmark: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4v8l2.4-1.6L14 12V4"/></svg>`,
+  taste: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M3 11h18M9 7c0-1 6-1 6 0"/></svg>`,
+  flower: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="2.4"/><path d="M12 3.2c1.5 0 2.5 1.4 1.9 2.9 1.4-.8 2.9 0 2.9 1.6s-1.5 2.4-2.9 1.6c.6 1.5-.4 2.9-1.9 2.9s-2.5-1.4-1.9-2.9c-1.4.8-2.9 0-2.9-1.6s1.5-2.4 2.9-1.6C9.5 4.6 10.5 3.2 12 3.2z"/></svg>`,
+  info: `<svg xmlns="${NS}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>`,
 };
 
 /**

@@ -11,8 +11,9 @@
 - **App 名**：治愈点餐 · 为她下厨
 - **核心闭环**：她选菜 → 写一句撒娇留言 → 送出（邮件提醒效果）→ 做饭的人在「采购单」看到她选了什么 + 留言。
 - **来源**：`claude.ai/design` 导出的 HTML 原型（见 `/design-source/` 若保留）。原型是「目标外观」，不是代码结构蓝本——我们按小程序最佳实践重写，只对齐**视觉输出**。
-- **页面**：首页 home / 详情 detail / 采购单 shop / 菜单 menu / 我的 mine / 心愿单 wish。
-- **tab**：首页 · 菜单 · 采购单 · 我的（detail / wish 为 push 子页，非 tab）。
+- **页面**：首页 home / 菜谱 menu / 今晚 tonight / 我的 mine / 详情 detail / 做饭 cook / 心愿单 wish。
+- **tab**：首页 · 菜谱 · 今晚 · 我的（detail / cook / wish 为 push 子页，非 tab）。
+  （2026-07 新版界面：原「采购单 shop」升级为「今晚 tonight」= 今晚一起做的菜 + 她的留言 + 采购清单 + 开始做饭；新增「做饭 cook」分步计时页。）
 
 ## 2. 不可动摇的原则
 
@@ -32,6 +33,7 @@ sitemap.json
   tokens.wxss              设计变量（颜色/圆角/阴影），通过 page{} 暴露 CSS 变量
   shared.wxss              共享原子类（chip / meta / btn / ph / sec-head ...）
 /mock                      全部静态数据，按领域分文件，index.js 汇总导出
+                           （dishes 含 cat/catClass 供菜谱筛选；cooking.js = 做饭分步）
 /utils
   store.js                 心愿单/已送出 状态 + 本地持久化 + 订阅
   icons.js                 SVG 图标注册表（name -> 原始 svg，用 currentColor 占位）
@@ -100,6 +102,11 @@ sitemap.json
 - **[决策] 订阅消息提醒（云开发，可选模块）**：发真实通知需后端，选用微信云开发（免运维、免费额度）。`cloudfunctions/registerCook`（记录做饭的人 openid）+ `cloudfunctions/notifyCook`（`cloud.openapi.subscribeMessage.send` 下发，需 `config.json` 声明 openapi 权限）。前端封装 `utils/notify.js`，配置在 `utils/cloud-config.js`（`ENV` + `TEMPLATE_ID` 两个空，填了才启用）。**关键约束**：订阅消息只能发给「自己授权过且在用本小程序」的人 → 做饭的人在「我的」页点「开启提醒」(`requestSubscribeMessage` + registerCook)；她在心愿单送出时 `notifyCook`。**降级**：`cloud-config` 为空时 notify 全部 no-op，App 仍按纯静态运行、测试不受影响。模板字段名(thing1/thing2)要对齐所选公共模板，thing ≤20字符已截断。详见 `cloudfunctions/README.md`。
 - **[决策] 每道菜独立菜谱 + 采购单聚合**：`mock/recipes.js` 按 dishId 存各自的 `desc/ingredients/steps/shopping`。详情页用 `getRecipe(id)` 取当前菜；采购单不再写死，用 `buildChecklist(今晚的菜ids)` 按分组（主食/肉蛋/蔬菜/调味）归并、同名去重生成。shop 页仅当「今晚的菜」集合变化时重建清单（用 `_checklistSig` 比对），避免 store 其它变更覆盖用户已勾选状态。食材缩略图目前仅意面那套有真图，其余食材 `img` 为空时详情页用 `.ph` 占位块（放真图进 assets 再补 img 即可）。
 - **[坑] 自定义事件名禁用原生事件名（`tap` 等）**：组件 `triggerEvent('tap', {...})` 同时让父级 `bind:tap` 收到「自定义事件」+「内部 view 原生 tap 冒泡」两次。第二次原生事件 `e.detail` 为空 → `id=undefined` → 详情页 `getDish('undefined')` 兜底成奶油蘑菇意面，于是出现「先进正确详情、又自动叠一层 pasta、返回才对」（真机必现）。修复：自定义事件改用非原生名（本项目 dish-card/menu-item 用 `select`），父级 `bind:select`；并在跳转前 `if(!id)return` 兜底。triggerEvent 一律避开 tap/longpress/touch*/input/change/confirm/scroll 等原生名。
+- **[决策] 2026-07 新版界面导入（claude.ai/design MCP）**：按新稿 `治愈点餐 App · 完整版.html` 整体重绘。tabs 改为 首页/菜谱/今晚/我的；`shop`→`tonight`；新增 `cook`。**严格保留两条业务闭环**：① 她点餐带一句话留言（wish 的 msg-block → `store.send(message)` → tonight 的 `her-msg`）；② 做饭的人授权订阅消息提醒（mine 的 `mine-subscribe` → `notify.subscribeAsCook` + 云函数）。逻辑层（store/notify/云函数）零改动，仅视觉与页面结构翻新。
+- **[坑] WXSS `background-image:url()` 不支持本地图片**：只认网络图或 base64。照片花朵页头 `.hdr-art` 必须用 `<image src="/assets/images/header-flowers.png">` 元素 + CSS `-webkit-mask-image` 淡出实现；三张新图(header-flowers/love-envelope/avatar-couple)均为 RGBA 透明底，mask 不被支持时也只显示花朵不出现硬边。
+- **[决策] `mock/cooking.js`（做饭分步）**：`getCookSteps(id)` → 每步 `{title,hb,hint,sug(秒),tip,img}`；pasta 全 6 步对齐原型，其余菜品按 `recipes.steps` 自动生成，保证每道菜都能进 cook 页。cook 页用 `setInterval` 倒计时，`onUnload/onHide` 必须清定时器。
+- **[决策] 菜谱筛选**：`dishes` 增 `cat`(快手/治愈系/正餐/甜点/低脂) + `catClass`(配色)；menu 页 `FILTERS` 按 `cat` 过滤。
+- **[决策] 采购单红点迁移到「今晚」tab(index 2)**：`tonight` onShow 调 `store.markSentSeen()` 熄灭；custom-tab-bar 的 badge 挂在今晚项。
 - **[坑] scroll-view 里的 `gap` 不生效**：`scroll-view scroll-x enable-flex` 内用 CSS `gap` 做横向间隔，在部分基础库/WebView 下**不渲染**（首页「治愈菜单」横滑 + 「心情卡」就因此间隔丢失）。修复：scroll-view 这一层改用**子元素 `margin-right`**（最后一个 `:last-child{margin-right:0}`）。普通 view（非 scroll-view）里的 `gap` 正常，不受影响（如 shop 时间线 / menu 列表）。横滑组件一律用 margin 间隔。
 
 ## 10. 验收清单（每次大改后过一遍）

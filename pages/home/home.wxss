@@ -1,53 +1,51 @@
-/* 首页 home —— 专属样式（共享原子类见 styles/shared.wxss） */
+/* 首页 home —— 专属样式（共享原子类见 styles/shared.wxss；love-banner/hdr-art 亦共享） */
 .home {
-  min-height: 100vh;
-  /* 原型 #home 右上角额外暖光 */
+  min-height: 100vh; position: relative;
   background:
     radial-gradient(840rpx 640rpx at 100% -4%, #F6E4DF 0%, transparent 62%),
     var(--cream);
 }
 
 /* ---- 问候 ---- */
-.greet { padding: 28rpx 44rpx 0; position: relative; }
-.greet .deco {
-  position: absolute; top: -4rpx; right: 28rpx; width: 240rpx; height: 236rpx;
-  border-radius: 50% 50% 48% 52% / 60% 58% 42% 40%;
-  background:
-    radial-gradient(60% 60% at 60% 35%, #F4C9C4 0%, transparent 60%),
-    radial-gradient(50% 50% at 35% 70%, #E7D2B8 0%, transparent 60%);
-  filter: blur(4rpx); opacity: 0.85;
-}
+.greet { padding: 12rpx 44rpx 0; position: relative; z-index: 1; }
 .greet-title {
   font-family: "Noto Serif SC", "Songti SC", serif;
-  font-weight: 700; font-size: 66rpx; line-height: 1.32; letter-spacing: 0.01em;
-  position: relative;
+  font-weight: 700; font-size: 58rpx; line-height: 1.34; letter-spacing: 0.01em; max-width: 520rpx;
 }
-.greet-title .hl { color: var(--rose-700); }
-.greet .sub {
-  margin-top: 22rpx; font-size: 26rpx; color: var(--ink-2); letter-spacing: 0.03em;
-  display: flex; align-items: center; gap: 12rpx;
-}
+.greet-title .hb { color: var(--rose-500); font-size: 44rpx; }
+.greet .sub { margin-top: 22rpx; font-size: 26rpx; color: var(--ink-2); letter-spacing: 0.03em; }
 
-/* ---- 搜索 ---- */
-.search {
-  margin: 40rpx 44rpx 0; display: flex; align-items: center; gap: 20rpx;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 36rpx;
-  padding: 26rpx 28rpx; box-shadow: var(--shadow-sm);
-}
-.search .field { flex: 1; font-size: 27rpx; color: var(--ink); background: none; }
-.search .ph-text { color: var(--ink-3); }
-.search .go {
-  background: var(--rose-500); color: #fff; font-size: 26rpx;
-  padding: 16rpx 32rpx; border-radius: 26rpx; font-weight: 500;
-}
+/* ---- 搜索（基础样式见 shared.wxss；垂直间距由 .search-sticky 提供） ---- */
+.search { margin: 0 44rpx; }
 
-/* ---- 今日推荐 ---- */
+/* ---- 心情卡（横滑：inline-flex + nowrap，避免 enable-flex 的竖向拉伸） ---- */
+.moods { padding: 32rpx 44rpx 8rpx; white-space: nowrap; }
+.mood {
+  display: inline-flex; vertical-align: middle; align-items: center; gap: 16rpx; margin-right: 22rpx;
+  padding: 24rpx 32rpx; border-radius: 36rpx; font-size: 27rpx; font-weight: 500;
+}
+.mood:last-child { margin-right: 0; }
+.mood.m1 { background: var(--sage-100); color: var(--sage-600); }
+.mood.m2 { background: #F1E7DF; color: #9A8270; } /* 一次性暖棕 */
+.mood.m3 { background: var(--honey-100); color: var(--honey-600); }
+.mood.m4 { background: var(--rose-100); color: var(--rose-700); }
+
+/* ---- 今日主推 ---- */
 .today {
-  margin: 44rpx; border-radius: var(--r-card); overflow: hidden;
-  background: linear-gradient(135deg, #FAEAE5, #F3DCD8);
-  box-shadow: var(--shadow); display: flex; position: relative; min-height: 380rpx;
+  margin: 36rpx 44rpx 0; border-radius: var(--r-card); overflow: hidden;
+  background: linear-gradient(135deg, #FAEAE5, #F3DCD8); /* 一次性暖玫瑰 */
+  box-shadow: var(--shadow); display: flex; position: relative; min-height: 416rpx;
 }
-.today .left { padding: 36rpx 32rpx 36rpx 38rpx; display: flex; flex-direction: column; width: 54%; }
+.today .top1 {
+  position: absolute; top: 28rpx; right: 28rpx; z-index: 3;
+  display: inline-flex; align-items: center; gap: 8rpx;
+  background: rgba(211, 140, 139, 0.92); color: #fff; font-size: 22rpx; font-weight: 600;
+  padding: 10rpx 22rpx; border-radius: 32rpx;
+}
+.today .left {
+  padding: 36rpx 28rpx 36rpx 38rpx; display: flex; flex-direction: column; width: 55%;
+  position: relative; z-index: 2;
+}
 .today .badge {
   align-self: flex-start; display: inline-flex; align-items: center; gap: 10rpx;
   background: var(--surface); color: var(--rose-700); font-size: 23rpx; font-weight: 600;
@@ -57,33 +55,15 @@
   font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700;
   font-size: 48rpx; margin-top: 28rpx; letter-spacing: 0.01em;
 }
-.today .desc { font-size: 24rpx; color: #9A7D77; margin-top: 14rpx; line-height: 1.6; } /* 一次性暖灰玫瑰 */
+.today .desc { font-size: 24rpx; color: #9A7D77; margin-top: 14rpx; line-height: 1.65; } /* 一次性暖灰玫瑰 */
 .today .metas { display: flex; align-items: center; gap: 18rpx; margin-top: auto; padding-top: 24rpx; }
 .today .cta {
-  margin-top: 28rpx; align-self: flex-start; background: var(--rose-500); color: #fff;
+  margin-top: 26rpx; align-self: flex-start; background: var(--rose-500); color: #fff;
   padding: 20rpx 36rpx; border-radius: 48rpx; font-size: 27rpx; font-weight: 500;
-  display: inline-flex; align-items: center; gap: 14rpx;
-  box-shadow: 0 16rpx 32rpx rgba(195, 120, 118, 0.3);
+  display: inline-flex; align-items: center; gap: 14rpx; box-shadow: 0 16rpx 32rpx rgba(195, 120, 118, 0.3);
 }
-.today .img { position: absolute; right: 0; top: 0; bottom: 0; width: 48%; }
+.today .img { position: absolute; right: 0; top: 0; bottom: 0; width: 47%; }
 .today .img .food { width: 100%; height: 100%; }
-.today .heart { position: absolute; top: 26rpx; right: 26rpx; }
 
-/* ---- 横滑菜单 ----
-   注意：scroll-view + enable-flex 下 `gap` 在部分基础库不生效，
-   改用子元素 margin-right 来做间隔（最后一个清零）。 */
-.hscroll { display: flex; padding: 4rpx 44rpx 8rpx; }
-.hscroll dish-card { flex: 0 0 300rpx; margin-right: 26rpx; }
-.hscroll dish-card:last-child { margin-right: 0; }
-
-/* ---- 心情卡（同理，用 margin-right 代替 gap） ---- */
-.moods { display: flex; padding: 4rpx 44rpx 12rpx; }
-.mood {
-  flex: 0 0 auto; display: flex; align-items: center; gap: 16rpx; margin-right: 22rpx;
-  padding: 24rpx 32rpx; border-radius: 36rpx; font-size: 27rpx; font-weight: 500;
-}
-.mood:last-child { margin-right: 0; }
-.mood.m1 { background: var(--sage-100); color: var(--sage-600); }
-.mood.m2 { background: var(--rose-100); color: var(--rose-700); }
-.mood.m3 { background: #F1E7DF; color: #9A8270; } /* 一次性暖棕 */
-.mood.m4 { background: var(--honey-100); color: var(--honey-600); }
+/* ---- 治愈菜单三宫格 ---- */
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22rpx; padding: 0 44rpx; }

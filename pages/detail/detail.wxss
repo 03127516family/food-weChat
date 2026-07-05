@@ -1,92 +1,73 @@
-/* 菜品详情 detail —— 专属样式（.navbar/.nav-ic/.nav-right/.btn/.actionbar/.toast 见 shared.wxss） */
-.detail {
-  min-height: 100vh;
-  background: var(--cream);
-}
+/* 菜品详情 detail —— 专属样式（.navbar/.nav-ic/.btn/.actionbar/.chip/.ph/.toast 见 shared.wxss） */
+.detail { min-height: 100vh; background: var(--cream); }
 
 /* navbar 吸顶（盖在主图上方滚动时保持可见） */
 .detail .navbar { position: sticky; top: 0; }
 
-/* ---- 主图 ---- */
-.detail-hero { height: 520rpx; position: relative; }
+/* ---- 主图 + 收藏 ---- */
+.detail-hero { height: 536rpx; position: relative; }
 .detail-hero .food { width: 100%; height: 100%; }
+.detail-hero .fav {
+  position: absolute; left: 44rpx; bottom: 36rpx;
+  display: inline-flex; align-items: center; gap: 12rpx;
+  background: rgba(255, 253, 250, 0.92); color: var(--rose-700);
+  font-size: 25rpx; font-weight: 600; padding: 16rpx 28rpx; border-radius: 40rpx;
+  box-shadow: var(--shadow-sm);
+}
 
 /* ---- 内容卡 ---- */
 .detail-sheet {
-  background: var(--cream);
-  border-radius: 52rpx 52rpx 0 0;
-  margin-top: -52rpx;
-  position: relative;
-  z-index: 2;
-  padding: 44rpx 44rpx 0;
-}
-.detail-top {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 24rpx;
+  background: var(--cream); border-radius: 52rpx 52rpx 0 0; margin-top: -52rpx;
+  position: relative; z-index: 2; padding: 44rpx 44rpx 0;
 }
 .dish-h2 {
-  font-family: "Noto Serif SC", "Songti SC", serif;
-  font-weight: 700; font-size: 50rpx;
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 50rpx;
+  display: flex; align-items: center; gap: 16rpx;
 }
-.love {
-  display: inline-flex; align-items: center; gap: 12rpx;
-  background: var(--rose-100); color: var(--rose-700);
-  font-size: 24rpx; font-weight: 600;
-  padding: 12rpx 24rpx; border-radius: 40rpx; white-space: nowrap; flex: 0 0 auto;
-}
+.dish-h2 .hb { color: var(--rose-500); font-size: 36rpx; }
 .detail-desc { font-size: 26rpx; color: var(--ink-2); line-height: 1.7; margin-top: 22rpx; }
 .detail-desc .b { color: var(--rose-700); font-weight: 500; }
 
-/* ---- 数据卡 ---- */
-.stats {
-  display: flex; background: var(--surface); border: 1px solid var(--line);
-  border-radius: 36rpx; margin-top: 36rpx; padding: 32rpx 0; box-shadow: var(--shadow-sm);
+/* ---- 信息行 ---- */
+.detail-info { display: flex; align-items: center; margin-top: 32rpx; }
+.detail-info .di {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 14rpx;
+  font-size: 26rpx; color: var(--ink); position: relative;
 }
-.stat {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8rpx;
-  position: relative;
+.detail-info .di + .di::before {
+  content: ""; position: absolute; left: 0; top: 4rpx; bottom: 4rpx; width: 1px; background: var(--line);
 }
-.stat + .stat::before {
-  content: ""; position: absolute; left: 0; top: 12rpx; bottom: 12rpx;
-  width: 1px; background: var(--line);
+
+/* ---- 卡片盒（食材清单 / 步骤概览共用） ---- */
+.card-box {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 36rpx;
+  padding: 32rpx; box-shadow: var(--shadow-sm); margin-top: 28rpx;
 }
-.stat .v { font-size: 30rpx; font-weight: 700; white-space: nowrap; }
-.stat .k { font-size: 22rpx; color: var(--ink-3); white-space: nowrap; }
+.cb-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28rpx; }
+.cb-t {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 600; font-size: 32rpx;
+  display: flex; align-items: center; gap: 16rpx;
+}
 
 /* ---- 食材网格 ---- */
-.ing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22rpx; margin-top: 8rpx; }
-.ing {
-  display: flex; align-items: center; gap: 22rpx;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 30rpx;
-  padding: 18rpx 22rpx; position: relative;
-}
-.ing .thumb { width: 84rpx; height: 84rpx; border-radius: 22rpx; flex: 0 0 auto; }
-.ing .nm { font-size: 27rpx; font-weight: 500; }
-.ing .qt { font-size: 22rpx; color: var(--ink-3); margin-top: 4rpx; }
-.ing .ck {
-  position: absolute; top: 18rpx; right: 18rpx; width: 36rpx; height: 36rpx;
-  border-radius: 50%; background: var(--sage-600);
-  display: flex; align-items: center; justify-content: center;
-}
-.hint {
-  font-size: 23rpx; color: var(--ink-3); margin: 26rpx 4rpx 0;
-  display: flex; align-items: center; gap: 12rpx;
-}
+.ing-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 26rpx 16rpx; }
+.ing { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14rpx; }
+.ing .thumb, .ing .iph { width: 124rpx; height: 124rpx; border-radius: 28rpx; }
+.ing .iph { display: flex; align-items: center; justify-content: center; }
+.ing .nm { font-size: 26rpx; font-weight: 500; }
+.ing .qt { font-size: 22rpx; color: var(--ink-3); margin-top: -4rpx; }
 
-/* ---- 做法步骤 ---- */
-.steps { margin-top: 12rpx; display: flex; flex-direction: column; gap: 24rpx; }
-.step {
-  display: flex; gap: 26rpx; align-items: center;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 32rpx;
-  padding: 28rpx 30rpx;
-}
+/* ---- 步骤概览 ---- */
+.steps { display: flex; flex-direction: column; }
+.step { display: flex; gap: 26rpx; padding: 26rpx 0; align-items: flex-start; }
+.step + .step { border-top: 1px dashed var(--line); }
 .step .no {
-  width: 52rpx; height: 52rpx; border-radius: 50%;
-  background: var(--rose-100); color: var(--rose-700);
-  font-weight: 700; font-size: 26rpx;
-  display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  width: 48rpx; height: 48rpx; border-radius: 50%;
+  background: var(--rose-100); color: var(--rose-700); font-weight: 700; font-size: 24rpx;
+  display: flex; align-items: center; justify-content: center; flex: 0 0 auto; margin-top: 2rpx;
 }
-.step .tx { flex: 1; font-size: 26rpx; line-height: 1.6; color: var(--ink); }
-.step .ic { flex: 0 0 auto; opacity: 0.65; }
+.step .stx { flex: 1; font-size: 26rpx; line-height: 1.6; color: var(--ink-2); }
 
-/* ---- 底部操作条安全区（非 tab 页，需自带底部安全区留白） ---- */
+/* ---- 底部操作条 ---- */
 .actionbar-safe { padding-bottom: calc(36rpx + env(safe-area-inset-bottom)); }
+.btn-wish { background: var(--rose-50); color: var(--rose-700); border: 3rpx solid var(--rose-100); }

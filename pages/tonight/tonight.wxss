@@ -1,0 +1,105 @@
+/* 今晚 tonight —— 专属样式（page-top/hdr-art/chip/btn/toast 见 shared.wxss）。
+   px×2=rpx；1px 细线/虚线保留不放大。暖玫瑰一次性装饰色见行内注释。 */
+.tonight-page {
+  min-height: 100vh; position: relative;
+  background:
+    radial-gradient(880rpx 640rpx at 100% -4%, #F6E4DF 0%, transparent 62%),
+    var(--cream);
+}
+
+/* ---------- 今晚我们一起做 ---------- */
+.tn-card {
+  margin: 28rpx 44rpx 0; background: var(--surface); border: 1px solid var(--rose-100);
+  border-radius: var(--r-card); padding: 36rpx; box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
+}
+.tn-card .tulip {
+  position: absolute; top: -12rpx; right: -8rpx; width: 236rpx; height: 192rpx;
+  background:
+    radial-gradient(46% 50% at 62% 42%, #F4C9C4 0%, transparent 60%),
+    radial-gradient(40% 44% at 32% 60%, #D9E2C8 0%, transparent 60%); /* 郁金香光晕（一次性） */
+  filter: blur(4rpx); opacity: 0.85;
+}
+.tn-h {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 34rpx;
+  display: flex; align-items: center; gap: 14rpx; color: #7E5F5A; /* 暖灰玫瑰（一次性） */
+  position: relative; z-index: 2;
+}
+.tn-grid { display: flex; gap: 28rpx; margin-top: 28rpx; position: relative; z-index: 2; }
+.tn-dishes { flex: 1.15; display: flex; flex-direction: column; }
+.tn-dish { display: flex; align-items: center; gap: 22rpx; padding: 18rpx 0; }
+.tn-dish + .tn-dish { border-top: 1px solid rgba(180, 130, 120, 0.14); } /* 暖色细分隔（一次性） */
+.tn-dish .thumb { width: 100rpx; height: 100rpx; border-radius: 26rpx; flex: 0 0 auto; }
+.tnd-n { font-size: 29rpx; font-weight: 500; }
+.tnd-m { font-size: 22rpx; color: #9A7D77; margin-top: 8rpx; } /* 暖灰玫瑰（一次性） */
+.tn-side {
+  flex: 1; border-left: 1px solid rgba(180, 130, 120, 0.16); padding-left: 28rpx;
+  display: flex; flex-direction: column; gap: 26rpx;
+}
+.tn-stat { display: flex; align-items: center; gap: 20rpx; }
+.tn-stat .ic {
+  width: 76rpx; height: 76rpx; border-radius: 24rpx; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+}
+.tn-stat .ic.a { background: var(--rose-100); }
+.tn-stat .ic.b { background: var(--sage-100); }
+.tn-stat .k { font-size: 21rpx; color: var(--ink-3); }
+.tn-stat .v { font-size: 26rpx; font-weight: 700; margin-top: 4rpx; }
+.tn-stat .v .b { font-size: 34rpx; color: var(--ink); }
+.tn-note {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-size: 25rpx; color: #A98A83; /* 暖灰玫瑰（一次性） */
+  line-height: 1.7; white-space: pre-line;
+}
+
+/* ---------- 她的留言 ---------- */
+.her-msg {
+  margin: 28rpx 44rpx 0; display: flex; gap: 26rpx; align-items: flex-start;
+  background: linear-gradient(135deg, #FBF0EC, #F7E6E2); /* rose-50 → rose-100 */
+  border: 1px solid var(--rose-100); border-radius: 36rpx; padding: 30rpx 32rpx; box-shadow: var(--shadow-sm);
+}
+.her-msg .hm-ic {
+  width: 68rpx; height: 68rpx; border-radius: 22rpx; flex: 0 0 auto; background: var(--surface);
+  display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);
+}
+.her-msg .qt { font-size: 28rpx; color: var(--ink); line-height: 1.65; font-family: "Noto Serif SC", "Songti SC", serif; }
+.her-msg .who { font-size: 23rpx; color: var(--rose-700); margin-top: 14rpx; font-weight: 600; }
+
+/* ---------- 采购清单 ---------- */
+.shop-card {
+  margin: 28rpx 44rpx 0; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-card); padding: 32rpx 32rpx 20rpx; box-shadow: var(--shadow-sm);
+}
+.shop-top { display: flex; align-items: center; gap: 18rpx; margin-bottom: 8rpx; }
+.st-t {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 600; font-size: 32rpx;
+  display: flex; align-items: center; gap: 16rpx;
+}
+.st-cnt { font-size: 22rpx; color: var(--ink-2); background: var(--cream-2); padding: 6rpx 18rpx; border-radius: 24rpx; }
+.st-mode {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 10rpx; font-size: 23rpx;
+  color: var(--rose-700); background: var(--rose-50); border: 1px solid var(--rose-100);
+  padding: 12rpx 22rpx; border-radius: 32rpx;
+}
+.grp { margin-top: 20rpx; }
+.grp-h { display: flex; align-items: center; gap: 14rpx; font-size: 26rpx; font-weight: 700; padding: 12rpx 0; }
+.grp-items { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24rpx; }
+.li { display: flex; align-items: center; gap: 20rpx; padding: 16rpx 0; }
+.li .box {
+  width: 38rpx; height: 38rpx; border-radius: 12rpx; border: 3rpx solid var(--rose-300);
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: center; background: var(--surface);
+}
+.li.done .box { background: var(--rose-500); border-color: var(--rose-500); }
+.li .nm { flex: 1; font-size: 26rpx; }
+.li.done .nm { color: var(--ink-3); text-decoration: line-through; text-decoration-color: var(--rose-300); }
+.li .qt { font-size: 23rpx; color: var(--ink-3); }
+.shop-tip {
+  display: flex; align-items: center; gap: 14rpx; font-size: 22rpx; color: var(--ink-3);
+  border-top: 1px dashed var(--line); margin-top: 16rpx; padding: 22rpx 4rpx 12rpx;
+}
+
+/* ---------- 开始做饭（浮在 tabBar 之上） ---------- */
+.tn-actionbar {
+  position: fixed; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 116rpx);
+  display: flex; padding: 24rpx 44rpx;
+  background: linear-gradient(to top, var(--cream) 72%, rgba(250, 245, 238, 0)); z-index: 30;
+}

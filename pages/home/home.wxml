@@ -1,70 +1,69 @@
 <!-- 首页 home -->
 <view class="home">
-  <status-bar />
+  <image class="hdr-art" src="/assets/images/header-flowers.png" mode="aspectFill" />
+
+  <!-- 状态栏安全区（吸顶） -->
+  <view class="safe-sticky"><status-bar /></view>
 
   <!-- 问候 -->
   <view class="greet">
-    <view class="deco"></view>
-    <view class="greet-title">
-      <view class="line">{{home.greetLine1}}</view>
-      <view class="hl">{{home.greetHl}}</view>
+    <view class="greet-title">{{home.greetHl}}<text class="hb"> ♥</text></view>
+    <view class="sub">{{home.greetSub}}</view>
+  </view>
+
+  <!-- 搜索（滚动时吸顶到状态栏下方） -->
+  <view class="search-sticky" style="top:{{statusBarH}}px">
+    <view class="search" bindtap="onSearch">
+      <icon name="search" color="{{C.ink3}}" size="36" />
+      <input class="field" placeholder="{{home.searchPlaceholder}}" placeholder-class="ph-text" disabled />
+      <view class="go">搜索</view>
     </view>
-    <view class="sub">{{home.greetSub}}<icon name="heart" color="{{C.rose300}}" size="28" /></view>
   </view>
 
-  <!-- 搜索 -->
-  <view class="search" bindtap="onSearch">
-    <icon name="search" color="{{C.ink3}}" size="36" />
-    <input class="field" placeholder="{{home.searchPlaceholder}}" placeholder-class="ph-text" disabled />
-    <view class="go">搜索</view>
-  </view>
+  <!-- 心情卡 -->
+  <scroll-view class="moods" scroll-x>
+    <view wx:for="{{moods}}" wx:key="label" class="mood {{item.tone}}" data-i="{{index}}" bindtap="onMood">
+      <icon name="{{item.icon}}" color="{{item.color}}" size="34" />{{item.label}}
+    </view>
+  </scroll-view>
 
-  <!-- 今日推荐 -->
+  <!-- 今日主推 -->
   <view class="today" bindtap="goToday">
+    <view class="top1"><icon name="star" color="{{C.white}}" size="24" />{{home.todayTop}}</view>
     <view class="left">
-      <view class="badge"><icon name="star" color="{{C.rose700}}" size="26" />{{home.todayBadge}}</view>
+      <view class="badge"><icon name="star" color="{{C.rose700}}" size="24" />{{home.todayBadge}}</view>
       <view class="today-name">{{today.name}}</view>
       <view class="desc">{{today.desc}}</view>
       <view class="metas">
-        <view class="meta"><icon name="clock" color="{{C.ink2}}" size="28" />{{today.time}}分钟</view>
+        <view class="meta"><icon name="clock" color="{{C.ink2}}" size="26" />{{today.time}}分钟</view>
         <view class="dot"></view>
-        <view class="meta"><icon name="level" color="{{C.ink2}}" size="28" />{{today.difficulty}}</view>
+        <view class="meta"><icon name="level" color="{{C.ink2}}" size="26" />{{today.difficulty}}</view>
       </view>
-      <view class="cta">查看菜谱 <icon name="chevron-right" color="{{C.white}}" size="30" /></view>
+      <view class="cta">查看菜谱 <icon name="chevron-right" color="{{C.white}}" size="28" /></view>
     </view>
     <view class="img"><image class="food" src="{{today.img}}" mode="aspectFill" /></view>
-    <view class="heart {{todaySaved ? 'on' : ''}}" catchtap="toggleTodayHeart">
-      <icon name="heart" color="{{todaySaved ? C.white : C.rose500}}" size="30" />
-    </view>
   </view>
 
   <!-- 治愈菜单 -->
-  <section-head title="治愈菜单" more="查看全部" bind:more="goMenu" />
-  <scroll-view class="hscroll" scroll-x enable-flex>
+  <section-head title="{{home.gridTitle}}" more="查看全部" bind:more="goMenu" />
+  <view class="grid3">
     <dish-card
-      wx:for="{{menuDishes}}"
+      wx:for="{{gridDishes}}"
       wx:key="id"
       dish="{{item}}"
       bind:select="onDishTap"
       bind:wish="onDishWish"
     />
-  </scroll-view>
+  </view>
 
-  <!-- 根据她的心情 -->
-  <section-head title="根据她的心情" more="换一换" moreIcon="refresh" bind:more="refreshMoods" />
-  <scroll-view class="moods" scroll-x enable-flex>
-    <view
-      wx:for="{{moods}}"
-      wx:key="label"
-      class="mood {{item.tone}}"
-      data-i="{{index}}"
-      bindtap="onMood"
-    >
-      <icon name="{{item.icon}}" color="{{item.color}}" size="36" />
-      {{item.label}}
-      <icon name="chevron-right" color="{{item.color}}" size="28" />
+  <!-- 爱心横幅 -->
+  <view class="love-banner">
+    <image class="lb-img" src="/assets/images/love-envelope.png" mode="aspectFit" />
+    <view class="lb-tx">
+      <view class="lb-title">{{home.loveTitle}}</view>
+      <view class="lb-sub">{{home.loveSub}}</view>
     </view>
-  </scroll-view>
+  </view>
 
   <view class="tabbar-safe"></view>
 </view>

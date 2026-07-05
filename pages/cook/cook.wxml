@@ -1,0 +1,97 @@
+<!-- 开始做饭 cook —— 分步引导 + 倒计时。步骤来自 mock.cooking。 -->
+<view class="cook">
+  <status-bar />
+
+  <view class="navbar">
+    <view class="nav-ic" bindtap="goBack"><icon name="chevron-left" color="{{C.ink}}" size="42" /></view>
+    <view class="title">开始做饭</view>
+    <view class="nav-ic"></view>
+  </view>
+
+  <!-- 进行中 -->
+  <block wx:if="{{!finished}}">
+    <!-- 步骤进度 -->
+    <view class="ck-prog">
+      <block wx:for="{{nodes}}" wx:key="id" wx:for-index="i">
+        <view class="node {{item.state}}">
+          <icon wx:if="{{item.state === 'done'}}" name="check" color="{{C.white}}" size="22" />
+          <block wx:else>{{i + 1}}</block>
+        </view>
+        <view wx:if="{{i < total - 1}}" class="bar {{item.state === 'done' ? 'done' : ''}}"></view>
+      </block>
+    </view>
+    <view class="ck-count">{{countText}}</view>
+
+    <!-- 占位图 -->
+    <view class="ck-img">
+      <view class="ph rosey">
+        <icon name="utensils" color="{{C.rose300}}" size="64" />
+        <view class="lbl">{{step.img}}</view>
+      </view>
+    </view>
+
+    <!-- 指引 -->
+    <view class="ck-instr">
+      <view class="ck-title">{{step.title}}<text wx:if="{{step.hbShow}}" class="hb"> ♥</text></view>
+      <view class="ck-hint">{{step.hint}}</view>
+    </view>
+
+    <!-- 计时 -->
+    <view class="ck-timer">
+      <view class="tval">{{timeText}}</view>
+      <view class="tsug">建议时间 {{sugText}}</view>
+    </view>
+
+    <!-- 控制 -->
+    <view class="ck-ctrl">
+      <view class="cc" bindtap="prevStep">
+        <view class="cb"><icon name="skip-back" color="{{C.rose500}}" size="44" /></view>
+        <view class="cl">上一步</view>
+      </view>
+      <view class="cc main" bindtap="toggleTimer">
+        <view class="cb"><icon name="{{running ? 'pause' : 'play'}}" color="{{C.white}}" size="56" /></view>
+        <view class="cl">{{running ? '暂停' : '继续'}}</view>
+      </view>
+      <view class="cc" bindtap="nextStep">
+        <view class="cb"><icon name="skip-fwd" color="{{C.rose500}}" size="44" /></view>
+        <view class="cl">下一步</view>
+      </view>
+    </view>
+
+    <!-- 小贴士 -->
+    <view class="ck-tip">
+      <view class="tip-ic"><icon name="leaf" color="{{C.sage600}}" size="36" /></view>
+      <view>
+        <view class="tip-t">小贴士</view>
+        <view class="tip-d">{{step.tip}}</view>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="ck-action">
+      <button class="btn btn-primary done-btn" bindtap="completeStep">
+        <icon name="heart" color="{{C.white}}" size="34" /><text>{{doneLbl}}</text>
+      </button>
+      <view class="look" bindtap="viewRecipe">
+        <view class="lb"><icon name="clipboard" color="{{C.rose500}}" size="40" /></view>
+        <text>查看菜谱</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 完成态 -->
+  <block wx:else>
+    <view class="ck-finish">
+      <view class="fic"><icon name="heart" color="{{C.white}}" size="90" /></view>
+      <view class="fh">做好啦，开饭咯 ♥</view>
+      <view class="fp">一道用心的美味完成啦～</view>
+      <view class="fp">愿这顿饭，治愈她今天的疲惫。</view>
+    </view>
+    <view class="ck-action ck-action-finish">
+      <button class="btn btn-ghost" style="flex:1;padding:30rpx;" bindtap="backHome">回到首页</button>
+      <button class="btn btn-primary" style="flex:1;padding:30rpx;" bindtap="logMeal">记录这一餐</button>
+    </view>
+  </block>
+</view>
+
+<view class="toast {{toast.show ? 'show' : ''}}">{{toast.text}}</view>

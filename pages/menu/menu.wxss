@@ -1,19 +1,36 @@
-/* 菜单 menu —— 专属样式（页头 .shop-head / 行 .ml 见 shared.wxss、menu-item） */
+/* 菜谱 menu —— 专属样式（page-top/search/menu-item/hdr-art 见 shared 与组件） */
 .menu-page {
-  min-height: 100vh;
-  /* 原型 #shop/#menu 右上角暖光 */
+  min-height: 100vh; position: relative;
   background:
     radial-gradient(840rpx 600rpx at 100% -3%, #F6E4DF 0%, transparent 60%),
     var(--cream);
 }
 
-/* 原型 h1 覆盖为 28px（×2=56rpx），区别于 shop-head 默认 60rpx */
-.menu-h1 { font-size: 56rpx; }
+.menu-page .search { margin: 0 44rpx; }
 
-/* 菜单列表（原型 .menu-list：padding 4px 22px 0 / gap 13px → ×2） */
-.menu-list {
-  padding: 8rpx 44rpx 0;
-  display: flex;
-  flex-direction: column;
-  gap: 26rpx;
+/* ---- 分类筛选（scroll-view 横滑） ----
+   scroll-view 自带 overflow:hidden（内部样式，WXSS 里看不到）。用 flex+align-items
+   会让居中的胶囊在交叉轴上溢出被裁切；改用 inline-block + white-space:nowrap，
+   无交叉轴拉伸/居中，胶囊高度纯由自身内边距决定，绝不被裁。 */
+.filters { white-space: nowrap; padding: 24rpx 44rpx 8rpx; }
+.filter {
+  display: inline-block; vertical-align: middle; margin-right: 18rpx;
+  padding: 16rpx 34rpx; border-radius: 40rpx; line-height: 1.2;
+  font-size: 26rpx; font-weight: 500;
+  background: var(--surface); border: 1px solid var(--line); color: var(--ink-2);
 }
+.filter:last-child { margin-right: 0; }
+.filter.on {
+  background: var(--rose-500); color: #fff; border-color: var(--rose-500);
+  box-shadow: 0 12rpx 28rpx rgba(195, 120, 118, 0.28);
+}
+
+/* ---- 排序行 ---- */
+.sort-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26rpx 48rpx 8rpx; font-size: 25rpx; color: var(--ink-2);
+}
+.sort-row .l, .sort-row .r { display: flex; align-items: center; gap: 12rpx; }
+
+/* ---- 列表 ---- */
+.menu-list { padding: 12rpx 44rpx 0; display: flex; flex-direction: column; gap: 26rpx; }

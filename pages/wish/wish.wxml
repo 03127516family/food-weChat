@@ -1,6 +1,7 @@
 <!-- 心愿单 wish -->
 <view class="wish-page">
   <status-bar />
+  <image class="hdr-art wish-art" src="/assets/images/header-flowers.png" mode="aspectFill" />
 
   <view class="navbar">
     <view class="nav-ic" bindtap="goBack"><icon name="chevron-left" color="{{C.ink}}" size="42" /></view>

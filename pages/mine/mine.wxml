@@ -1,38 +1,57 @@
 <!-- 我的 mine -->
 <view class="mine-page">
   <status-bar />
+  <image class="hdr-art mine-art" src="/assets/images/header-flowers.png" mode="aspectFill" />
+  <view class="page-top"><view class="pt-title">我的</view></view>
 
-  <view class="mine-wrap">
-    <view class="mine-av"><icon name="user" color="{{C.white}}" size="84" /></view>
-    <view class="mine-name">{{p.name}}</view>
-    <view class="mine-streak">{{p.streakText}} <text class="hl">{{p.streakDays}}</text> 天</view>
+  <!-- 资料 -->
+  <view class="mine-profile">
+    <image class="mine-pf-av" src="{{p.avatar}}" mode="aspectFill" />
+    <view class="mp-tx">
+      <view class="mp-name">{{p.name}} <icon name="heart" color="{{C.rose300}}" size="30" /></view>
+      <view class="mp-desc">{{p.desc}}</view>
+    </view>
+  </view>
 
-    <view class="mine-row">
-      <view wx:for="{{p.stats}}" wx:key="k">
-        <view class="v">{{item.v}}</view>
-        <view class="k">{{item.k}}</view>
+  <!-- 统计 -->
+  <view class="mine-stats">
+    <view class="ms" wx:for="{{stats}}" wx:key="k">
+      <view class="ms-ic {{item.tone}}"><icon name="{{item.icon}}" color="{{item.color}}" size="44" /></view>
+      <view class="ms-v">{{item.v}}</view>
+      <view class="ms-k">{{item.k}}</view>
+    </view>
+  </view>
+
+  <!-- 做饭的人：授权接收她的点餐提醒（订阅消息） -->
+  <view class="mine-subscribe {{subscribed ? 'on' : ''}}" bindtap="onSubscribe">
+    <view class="sub-ic"><icon name="bell" color="{{subscribed ? C.sage600 : C.white}}" size="38" /></view>
+    <view class="sub-tx">
+      <view class="sub-t">{{subscribed ? '已开启 · 她下单会提醒你' : '开启她的点餐提醒'}}</view>
+      <view class="sub-d">{{subscribed ? '她送出心愿单时，你会第一时间收到' : '授权后，她点餐会通过订阅消息提醒你'}}</view>
+    </view>
+    <icon wx:if="{{!subscribed}}" name="chevron-right" color="{{C.white}}" size="32" />
+  </view>
+
+  <!-- 菜单行 -->
+  <view class="mine-menu">
+    <view class="mm-row" wx:for="{{menu}}" wx:key="label" data-i="{{index}}" bindtap="onMenuTap">
+      <view class="mm-ic {{item.tone}}"><icon name="{{item.icon}}" color="{{item.color}}" size="40" /></view>
+      <view class="mm-tx">
+        <view class="mm-t">{{item.label}}</view>
+        <view class="mm-d">{{item.desc}}</view>
       </view>
+      <icon class="chev" name="chevron-right" color="{{C.ink3}}" size="32" />
     </view>
+  </view>
 
-    <!-- 做饭的人：授权接收她的点餐提醒（订阅消息） -->
-    <view class="mine-subscribe {{subscribed ? 'on' : ''}}" bindtap="onSubscribe">
-      <icon name="bell" color="{{subscribed ? C.sage600 : C.white}}" size="34" />
-      <text>{{subscribed ? '已开启 · 她下单会提醒你' : '开启她的点餐提醒'}}</text>
+  <!-- 爱心横幅 -->
+  <view class="love-banner">
+    <image class="lb-img" src="/assets/images/love-envelope.png" mode="aspectFit" />
+    <view class="lb-tx">
+      <view class="lb-title">{{p.loveTitle}}</view>
+      <view class="lb-sub">{{p.loveSub}}</view>
     </view>
-
-    <view class="mine-card">
-      <view
-        wx:for="{{p.menu}}"
-        wx:key="label"
-        class="mine-li"
-        data-i="{{index}}"
-        bindtap="onMenuTap"
-      >
-        <icon name="{{item.icon}}" color="{{C.rose500}}" size="38" />
-        <text class="lb">{{item.label}}</text>
-        <icon class="ar" name="chevron-right" color="{{C.ink3}}" size="32" />
-      </view>
-    </view>
+    <icon class="lh" name="heart-line" color="{{C.rose300}}" size="40" />
   </view>
 
   <view class="tabbar-safe"></view>

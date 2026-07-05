@@ -1,13 +1,20 @@
-/* menu-item —— 列表行专属样式；chip/meta/heart/add 来自 shared.wxss */
+/* menu-item —— 列表行专属样式；chip/meta/dot/heart/add 来自 shared.wxss */
+:host { display: block; }
 .ml {
-  display: flex; align-items: center; gap: 26rpx;
+  display: flex; align-items: center; gap: 24rpx;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 36rpx;
-  padding: 22rpx;
+  padding: 24rpx;
   box-shadow: var(--shadow-sm);
 }
-.ml .thumb { width: 148rpx; height: 148rpx; border-radius: 28rpx; flex: 0 0 auto; }
-.ml-body { flex: 1; }
-.ml-name { font-size: 31rpx; font-weight: 700; }
-.ml .metas { display: flex; align-items: center; gap: 16rpx; margin-top: 18rpx; }
+.ml .thumb { width: 176rpx; height: 176rpx; border-radius: 28rpx; flex: 0 0 auto; }
+.ml-body { flex: 1; min-width: 0; }
+.ml-name { font-size: 32rpx; font-weight: 700; }
+.ml-desc {
+  font-size: 23rpx; color: var(--ink-2); margin-top: 12rpx; line-height: 1.5;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden;
+}
+.ml .metas { display: flex; align-items: center; gap: 14rpx; margin-top: 18rpx; flex-wrap: wrap; }
+.ml .add { flex: 0 0 auto; }
+.ml-heart { flex: 0 0 auto; width: 48rpx; display: flex; align-items: center; justify-content: center; }

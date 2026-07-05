@@ -205,7 +205,7 @@ const INGREDIENT_HINT = '点击食材可查看小贴士';
 
 // 采购单分组：顺序 + 图标
 const GROUP_ORDER = ['主食', '肉蛋', '蔬菜', '调味'];
-const GROUP_ICON = { 主食: 'leaf-plain', 肉蛋: 'egg', 蔬菜: 'veg', 调味: 'bottle' };
+const GROUP_ICON = { 主食: 'wheat', 肉蛋: 'egg', 蔬菜: 'leaf-plain', 调味: 'bottle' };
 
 /** 取某道菜的菜谱；未命中回退 pasta，保证详情页不空 */
 function getRecipe(id) {

@@ -1,0 +1,91 @@
+<!-- 今晚 tonight —— 今晚一起做的菜 + 她的留言 + 采购清单 + 开始做饭。数据来自 /mock + store。 -->
+<view class="tonight-page">
+  <status-bar />
+  <image class="hdr-art" src="/assets/images/header-flowers.png" mode="aspectFill" />
+  <view class="page-top"><view class="pt-title">{{copy.title}}</view></view>
+
+  <!-- 今晚我们一起做 -->
+  <view class="tn-card">
+    <view class="tulip"></view>
+    <view class="tn-h"><icon name="heart" color="{{C.rose500}}" size="32" />{{copy.cardTitle}}</view>
+    <view class="tn-grid">
+      <view class="tn-dishes">
+        <view class="tn-dish" wx:for="{{tonight}}" wx:key="id">
+          <image class="thumb" src="{{item.img}}" mode="aspectFill" />
+          <view>
+            <view class="tnd-n">{{item.name}}</view>
+            <view class="tnd-m">{{item.time}}分钟 · {{item.serves}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="tn-side">
+        <view class="tn-stat">
+          <view class="ic a"><icon name="clock" color="{{C.rose500}}" size="36" /></view>
+          <view>
+            <view class="k">{{copy.totalLabel}}</view>
+            <view class="v">约 <text class="b">{{tonightTime}}</text> 分钟</view>
+          </view>
+        </view>
+        <view class="tn-stat">
+          <view class="ic b"><icon name="person" color="{{C.sage600}}" size="36" /></view>
+          <view>
+            <view class="k">{{copy.peopleLabel}}</view>
+            <view class="v"><text class="b">2</text> 人份</view>
+          </view>
+        </view>
+        <view class="tn-note">{{copy.note}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 她的留言（仅当有留言时） -->
+  <view wx:if="{{herMessage}}" class="her-msg">
+    <view class="hm-ic"><icon name="quote" color="{{C.rose500}}" size="36" /></view>
+    <view class="hm-body">
+      <view class="qt">“{{herMessage}}”</view>
+      <view class="who">{{copy.herWho}}</view>
+    </view>
+  </view>
+
+  <!-- 采购清单 -->
+  <view class="shop-card">
+    <view class="shop-top">
+      <view class="st-t"><icon name="cart" color="{{C.honey600}}" size="34" />{{copy.shopTitle}}</view>
+      <text class="st-cnt">共 {{shopCount}} 项</text>
+      <view class="st-mode" bindtap="onShopMode"><icon name="cart" color="{{C.rose700}}" size="24" />{{copy.shopMode}}</view>
+    </view>
+    <block wx:for="{{checklist}}" wx:key="title" wx:for-item="g" wx:for-index="gi">
+      <view class="grp">
+        <view class="grp-h"><icon name="{{g.icon}}" color="{{g.color}}" size="30" />{{g.title}}</view>
+        <view class="grp-items">
+          <view
+            wx:for="{{g.items}}"
+            wx:key="name"
+            wx:for-item="it"
+            wx:for-index="ii"
+            class="li {{it.done ? 'done' : ''}}"
+            data-gi="{{gi}}"
+            data-ii="{{ii}}"
+            bindtap="toggleLi"
+          >
+            <view class="box"><icon wx:if="{{it.done}}" name="check" color="{{C.white}}" size="22" /></view>
+            <view class="nm">{{it.name}}</view>
+            <view class="qt">{{it.qty}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view class="shop-tip"><icon name="bulb" color="{{C.honey600}}" size="28" />{{copy.tip}}</view>
+  </view>
+
+  <view style="height: 220rpx;"></view>
+</view>
+
+<!-- 开始做饭（浮在 tabBar 之上） -->
+<view class="tn-actionbar">
+  <button class="btn btn-primary" style="flex:1;padding:32rpx;" bindtap="onStartCook">
+    {{copy.startCook}} <icon name="arrow-right" color="{{C.white}}" size="34" />
+  </button>
+</view>
+
+<view class="toast {{toast.show ? 'show' : ''}}">{{toast.text}}</view>

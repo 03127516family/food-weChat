@@ -1,30 +1,30 @@
-// 首页 —— 问候 / 搜索 / 今日推荐 / 治愈菜单横滑 / 心情卡。数据来自 /mock。
+// 首页 —— 问候 / 搜索 / 心情 / 今日主推 / 治愈菜单三宫格 / 爱心横幅。数据来自 /mock。
 const mock = require('../../mock/index');
 const colors = require('../../utils/colors');
 const toast = require('../../utils/toast');
 
-// 心情卡配色（对应 tone）
-const MOOD_COLOR = { m1: colors.sage600, m2: colors.rose700, m3: '#9A8270', m4: colors.honey600 };
+// 心情卡配色（对应 tone m1..m4）
+const MOOD_COLOR = { m1: colors.sage600, m2: '#9A8270', m3: colors.honey600, m4: colors.rose700 };
 
 Page({
   data: {
     C: colors,
     home: mock.copy.HOME,
     today: mock.getDish(mock.HOME_TODAY),
-    menuDishes: mock.HOME_MENU.map(mock.getDish),
+    gridDishes: mock.HOME_GRID.map(mock.getDish),
     moods: mock.copy.HOME.moods.map((m) => ({ ...m, color: MOOD_COLOR[m.tone] })),
-    todaySaved: false,
+    statusBarH: 20, // 状态栏高度(px)，供搜索框吸顶定位
     toast: { show: false, text: '' },
   },
 
   onLoad() {
-    this.setData({ todaySaved: !!this.data.today.saved });
+    const app = getApp();
+    this.setData({ statusBarH: (app && app.globalData && app.globalData.statusBarHeight) || 20 });
   },
 
   onShow() {
-    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setSelected(0);
-    }
+    const tb = this.getTabBar && this.getTabBar();
+    if (tb) tb.setSelected(0);
   },
 
   goToday() {
@@ -41,16 +41,11 @@ Page({
   goMenu() {
     wx.switchTab({ url: '/pages/menu/menu' });
   },
-  toggleTodayHeart() {
-    this.setData({ todaySaved: !this.data.todaySaved });
-  },
   onSearch() {
-    toast.show(this, '搜索功能待接入');
+    toast.show(this, '为你寻找灵感中…');
   },
-  refreshMoods() {
-    toast.show(this, '已换一批');
-  },
-  onMood(e) {
-    toast.show(this, this.data.moods[e.currentTarget.dataset.i].label);
+  onMood() {
+    // 心情卡：跳到菜谱页帮她挑
+    wx.switchTab({ url: '/pages/menu/menu' });
   },
 });

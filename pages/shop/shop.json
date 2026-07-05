@@ -1,8 +1,0 @@
-{
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "icon": "/components/icon/icon",
-    "status-bar": "/components/status-bar/status-bar",
-    "section-head": "/components/section-head/section-head"
-  }
-}

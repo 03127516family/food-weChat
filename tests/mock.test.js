@@ -13,9 +13,18 @@ test('DISHES 每项字段齐全', () => {
   });
 });
 
-test('首页/菜单引用的 dishId 均有效', () => {
-  [mock.HOME_TODAY, ...mock.HOME_MENU, ...mock.MENU_LIST, ...mock.shopping.DEFAULT_TONIGHT].forEach((id) => {
+test('首页/菜谱引用的 dishId 均有效', () => {
+  [mock.HOME_TODAY, ...mock.HOME_GRID, ...mock.MENU_LIST, ...mock.shopping.DEFAULT_TONIGHT].forEach((id) => {
     ok(mock.isValidId(id), '非法 dishId: ' + id);
+  });
+});
+
+test('每道菜有分类(cat) 且在 FILTERS 内', () => {
+  ok(mock.FILTERS[0] === '全部', 'FILTERS 首项应为全部');
+  Object.keys(mock.DISHES).forEach((id) => {
+    const d = mock.DISHES[id];
+    ok(mock.FILTERS.indexOf(d.cat) > 0, id + ' 分类不在 FILTERS: ' + d.cat);
+    ok(['rose', 'sage', 'honey'].indexOf(d.catClass) >= 0, id + ' catClass 非法');
   });
 });
 
@@ -29,8 +38,18 @@ test('时间线 3 段、tone 为 a/b/c', () => {
 });
 
 test('文案存在', () => {
-  ok(mock.copy.HOME.greetHl && mock.copy.WISH.title && mock.copy.SHOP.title && mock.copy.MENU.title);
+  ok(mock.copy.HOME.greetHl && mock.copy.WISH.title && mock.copy.TONIGHT.title && mock.copy.MENU.title);
   eq(mock.copy.WISH.phrases.length, 4);
+  eq(mock.copy.HOME.moods.length, 4);
+});
+
+test('做饭分步：每道菜都能取到 ≥3 步', () => {
+  Object.keys(mock.DISHES).forEach((id) => {
+    const steps = mock.cooking.getCookSteps(id);
+    ok(steps.length >= 3, id + ' 做饭步骤过少');
+    steps.forEach((s) => ok(s.title && typeof s.sug === 'number' && s.img, id + ' 步骤字段缺失'));
+  });
+  eq(mock.cooking.getCookSteps('pasta').length, 6);
 });
 
 test('每道菜都有独立菜谱（desc/食材/步骤/采购项）', () => {

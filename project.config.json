@@ -18,7 +18,10 @@
   "cloudfunctionRoot": "cloudfunctions/",
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "design-source" },
+      { "type": "folder", "value": "tests" }
+    ],
     "include": []
   },
   "appid": "wxc140d5628d66cd4d",

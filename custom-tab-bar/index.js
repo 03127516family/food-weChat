@@ -10,8 +10,8 @@ Component({
     badge: false,
     list: [
       { path: '/pages/home/home', text: '首页', icon: 'home' },
-      { path: '/pages/menu/menu', text: '菜单', icon: 'bowl' },
-      { path: '/pages/shop/shop', text: '采购单', icon: 'clipboard', badge: true },
+      { path: '/pages/menu/menu', text: '菜谱', icon: 'chef' },
+      { path: '/pages/tonight/tonight', text: '今晚', icon: 'moon', badge: true },
       { path: '/pages/mine/mine', text: '我的', icon: 'user' },
     ],
   },

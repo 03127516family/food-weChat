@@ -70,7 +70,7 @@ Page({
   },
   viewCookSide() {
     this.setData({ sentShow: false });
-    wx.switchTab({ url: '/pages/shop/shop' });
+    wx.switchTab({ url: '/pages/tonight/tonight' });
   },
   backHome() {
     this.setData({ sentShow: false });

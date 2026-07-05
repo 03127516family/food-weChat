@@ -1,82 +1,66 @@
-<!-- 菜品详情 detail —— 头部 + 食材/步骤/简介 均按被点菜品取自 mock.recipes -->
+<!-- 菜品详情 detail —— 头部 + 食材清单 + 步骤概览 均按被点菜品取自 mock.recipes -->
 <view class="detail">
   <status-bar />
 
-  <!-- 自绘导航栏 -->
+  <!-- 自绘导航栏（滚动吸顶） -->
   <view class="navbar">
     <view class="nav-ic" bindtap="goBack"><icon name="chevron-left" color="{{C.ink}}" size="42" /></view>
     <view class="title">菜品详情</view>
-    <view class="nav-right">
-      <view class="nav-ic" bindtap="onCollect"><icon name="heart-line" color="{{C.ink}}" size="42" /></view>
-      <view class="nav-ic" bindtap="onShare"><icon name="share" color="{{C.ink}}" size="42" /></view>
-    </view>
+    <view class="nav-ic" bindtap="onShare"><icon name="share" color="{{C.ink}}" size="40" /></view>
   </view>
 
-  <!-- 主图 -->
+  <!-- 主图 + 收藏 -->
   <view class="detail-hero">
     <image class="food" src="{{dish.img}}" mode="aspectFill" />
+    <view class="fav" bindtap="onCollect"><icon name="heart" color="{{C.rose700}}" size="28" />收藏</view>
   </view>
 
   <!-- 内容卡 -->
   <view class="detail-sheet">
-    <view class="detail-top">
-      <view class="dish-h2">{{dish.name}}</view>
-      <view class="love"><icon name="heart" color="{{C.rose700}}" size="28" />{{dish.love}}%</view>
-    </view>
+    <view class="dish-h2">{{dish.name}} <text class="hb">♥</text></view>
     <view class="detail-desc">{{recipe.desc.pre}}<text class="b">{{recipe.desc.hl}}</text>{{recipe.desc.post}}</view>
 
-    <!-- 数据卡 -->
-    <view class="stats">
-      <view class="stat">
-        <icon name="clock" color="{{C.rose500}}" size="44" />
-        <view class="v">{{dish.time}}分钟</view>
-        <view class="k">烹饪时间</view>
-      </view>
-      <view class="stat">
-        <icon name="level" color="{{C.rose500}}" size="44" />
-        <view class="v">{{dish.difficulty}}</view>
-        <view class="k">难易程度</view>
-      </view>
-      <view class="stat">
-        <icon name="person" color="{{C.rose500}}" size="44" />
-        <view class="v">{{dish.serves}}</view>
-        <view class="k">适合人数</view>
-      </view>
+    <view class="detail-info">
+      <view class="di"><icon name="clock" color="{{C.ink3}}" size="32" /><text>{{dish.time}}分钟</text></view>
+      <view class="di"><icon name="level" color="{{C.ink3}}" size="32" /><text>{{dish.difficulty}}</text></view>
+      <view class="di"><icon name="person" color="{{C.ink3}}" size="32" /><text>{{dish.serves}}</text></view>
     </view>
 
-    <!-- 食材准备 -->
-    <section-head title="食材准备" more="2人份" moreIcon="chevron-down" flush />
-    <view class="ing-grid">
-      <view class="ing" wx:for="{{recipe.ingredients}}" wx:key="name">
-        <image wx:if="{{item.img}}" class="thumb" src="{{item.img}}" mode="aspectFill" />
-        <view wx:else class="thumb ph rosey"><icon name="leaf-plain" color="{{C.rose300}}" size="36" /></view>
-        <view>
+    <!-- 食材清单 -->
+    <view class="card-box">
+      <view class="cb-head">
+        <view class="cb-t"><icon name="leaf" color="{{C.sage600}}" size="34" />食材清单</view>
+        <text class="chip rose">{{dish.serves}}</text>
+      </view>
+      <view class="ing-grid">
+        <view class="ing" wx:for="{{recipe.ingredients}}" wx:key="name">
+          <image wx:if="{{item.img}}" class="thumb" src="{{item.img}}" mode="aspectFill" />
+          <view wx:else class="iph ph rosey"><icon name="leaf-plain" color="{{C.rose300}}" size="34" /></view>
           <view class="nm">{{item.name}}</view>
           <view class="qt">{{item.qty}}</view>
         </view>
-        <view wx:if="{{item.have}}" class="ck"><icon name="check" color="{{C.white}}" size="22" /></view>
       </view>
     </view>
-    <view class="hint"><icon name="bulb" color="{{C.honey600}}" size="28" />{{hint}}</view>
 
-    <!-- 做法步骤 -->
-    <section-head title="做法步骤" flush />
-    <view class="steps">
-      <view class="step" wx:for="{{recipe.steps}}" wx:key="text">
-        <view class="no">{{index + 1}}</view>
-        <view class="tx">{{item.text}}</view>
-        <icon class="ic" name="{{item.icon}}" color="{{C.ink3}}" size="68" />
+    <!-- 步骤概览 -->
+    <view class="card-box">
+      <view class="cb-head"><view class="cb-t"><icon name="chef" color="{{C.rose500}}" size="34" />步骤概览</view></view>
+      <view class="steps">
+        <view class="step" wx:for="{{recipe.steps}}" wx:key="text">
+          <view class="no">{{index + 1}}</view>
+          <view class="stx">{{item.text}}</view>
+        </view>
       </view>
     </view>
   </view>
 
   <!-- 底部操作条 -->
   <view class="actionbar actionbar-safe">
-    <button class="btn btn-ghost" style="flex:1;padding:30rpx;" bindtap="goShop">
-      <icon name="clipboard" color="{{C.sage600}}" size="36" />生成采购单
+    <button class="btn btn-ghost btn-wish" style="flex:1;padding:30rpx;" bindtap="onAddWish">
+      <icon name="{{inWish ? 'check' : 'heart-line'}}" color="{{C.rose700}}" size="34" /><text>{{inWish ? '已加入心愿单' : '加入心愿单'}}</text>
     </button>
-    <button class="btn btn-primary" style="flex:1.5;padding:30rpx;" bindtap="onAddWish">
-      <icon name="heart" color="{{C.white}}" size="36" /><text>{{inWish ? '已加入心愿单' : '加入心愿单'}}</text>
+    <button class="btn btn-primary" style="flex:1.3;padding:30rpx;" bindtap="startCook">
+      <icon name="chef" color="{{C.white}}" size="34" />直接开始
     </button>
   </view>
 </view>

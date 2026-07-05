@@ -1,17 +1,20 @@
-<!-- menu-item —— 「治愈菜单」整页列表行。点行进详情；+ 加入心愿单；♥ 收藏。 -->
+<!-- menu-item —— 「菜谱」整页列表行。点行进详情；+ 加入心愿单；♥ 收藏。 -->
 <view class="ml" bindtap="onTap">
   <image class="thumb" src="{{dish.img}}" mode="aspectFill" />
   <view class="ml-body">
     <view class="ml-name">{{dish.name}}</view>
+    <view class="ml-desc">{{dish.desc}}</view>
     <view class="metas">
-      <text class="chip {{dish.tagType}}">{{dish.tag}}</text>
-      <view class="meta">{{dish.time}}分钟</view>
+      <view class="meta"><icon name="clock" color="{{C.ink2}}" size="26" />{{dish.time}}分钟</view>
+      <view class="dot"></view>
+      <view class="meta"><icon name="level" color="{{C.ink2}}" size="26" />{{dish.difficulty}}</view>
+      <text class="chip {{dish.catClass}}">{{dish.cat}}</text>
     </view>
   </view>
   <view class="add {{inWish ? 'in' : ''}} {{pressed ? 'pressed' : ''}}" catchtap="onAdd">
-    <icon name="{{inWish ? 'check' : 'plus'}}" color="{{C.white}}" size="32" />
+    <icon name="{{inWish ? 'check' : 'plus'}}" color="{{C.white}}" size="30" />
   </view>
-  <view class="heart {{saved ? 'on' : ''}}" catchtap="onHeart">
-    <icon name="heart" color="{{saved ? C.white : C.rose500}}" size="30" />
+  <view class="ml-heart {{saved ? 'on' : ''}}" catchtap="onHeart">
+    <icon name="{{saved ? 'heart' : 'heart-line'}}" color="{{saved ? C.rose500 : C.rose300}}" size="40" />
   </view>
 </view>

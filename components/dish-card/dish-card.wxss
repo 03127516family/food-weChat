@@ -1,18 +1,29 @@
-/* dish-card —— 仅卡片专属样式；chip/meta/dot/heart/add/food 来自 shared.wxss */
-/* 宽度由父级控制（home 用 .hscroll dish-card{flex:0 0 300rpx}） */
-:host { display: block; }
-.dish {
-  width: 100%;
+/* dish-card —— 三宫格卡专属样式；chip/meta/heart/add/food 来自 shared.wxss。
+   宽度由父级网格控制（home 用 .grid3 三列）。 */
+:host { display: block; height: 100%; }
+.gcard {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 36rpx;
+  border-radius: 32rpx;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  /* 填满网格单元高度，让同排卡片底部对齐（名称换行导致高度不一时也一致） */
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
-.dish .img { position: relative; height: 236rpx; }
-.dish .img .add { position: absolute; top: 18rpx; left: 18rpx; width: 54rpx; height: 54rpx; z-index: 3; }
-.dish .img .heart { position: absolute; top: 18rpx; right: 18rpx; width: 54rpx; height: 54rpx; }
-.dish .body { padding: 22rpx 24rpx 26rpx; }
-.dish-name { font-size: 29rpx; font-weight: 700; }
-.tagrow { margin: 16rpx 0 18rpx; }
-.dish .metas { display: flex; align-items: center; gap: 14rpx; }
+.gimg { position: relative; height: 192rpx; flex: 0 0 auto; }
+.gimg .add { position: absolute; top: 14rpx; left: 14rpx; width: 52rpx; height: 52rpx; z-index: 3; }
+.gimg .heart { position: absolute; top: 14rpx; right: 14rpx; width: 52rpx; height: 52rpx; }
+.gimg .gtime {
+  position: absolute; left: 14rpx; bottom: 14rpx;
+  background: rgba(62, 55, 51, 0.6); color: #fff;
+  font-size: 20rpx; padding: 6rpx 14rpx; border-radius: 20rpx;
+}
+.gbody { padding: 18rpx 20rpx 22rpx; flex: 1 1 auto; }
+.gname { font-size: 26rpx; font-weight: 700; line-height: 1.3; }
+.gdesc {
+  font-size: 21rpx; color: var(--ink-2); margin-top: 10rpx; line-height: 1.5;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}

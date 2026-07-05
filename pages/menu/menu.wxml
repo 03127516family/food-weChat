@@ -1,16 +1,42 @@
-<!-- 菜单 menu —— 治愈菜单整页列表。数据来自 /mock -->
+<!-- 菜谱 menu —— 整页列表 + 分类筛选。数据来自 /mock -->
 <view class="menu-page">
-  <status-bar />
+  <image class="hdr-art" src="/assets/images/header-flowers.png" mode="aspectFill" />
 
-  <!-- 页头 -->
-  <view class="shop-head" style="padding-bottom:0">
-    <view class="head-title menu-h1">{{copy.title}}</view>
-    <view class="sub">{{copy.sub}}</view>
+  <!-- 状态栏安全区（吸顶） -->
+  <view class="safe-sticky"><status-bar /></view>
+
+  <view class="page-top"><view class="pt-title">{{copy.title}}</view></view>
+
+  <!-- 搜索（滚动时吸顶到状态栏下方） -->
+  <view class="search-sticky" style="top:{{statusBarH}}px">
+    <view class="search" bindtap="onSearch">
+      <icon name="search" color="{{C.ink3}}" size="36" />
+      <input class="field" placeholder="{{copy.searchPlaceholder}}" placeholder-class="ph-text" disabled />
+      <view class="go">搜索</view>
+    </view>
   </view>
 
-  <view style="height:28rpx"></view>
+  <!-- 分类筛选 -->
+  <scroll-view class="filters" scroll-x>
+    <view
+      wx:for="{{filters}}"
+      wx:key="*this"
+      class="filter {{curFilter === item ? 'on' : ''}}"
+      data-f="{{item}}"
+      bindtap="setFilter"
+    >{{item}}</view>
+  </scroll-view>
 
-  <!-- 菜单列表 -->
+  <!-- 排序行 -->
+  <view class="sort-row">
+    <view class="l" bindtap="onFilterMore">
+      <icon name="filter" color="{{C.ink2}}" size="30" />筛选
+      <icon name="chevron-down" color="{{C.ink2}}" size="24" />
+    </view>
+    <view class="r" bindtap="onSort">默认排序 <icon name="chevron-down" color="{{C.ink2}}" size="24" /></view>
+  </view>
+
+  <!-- 列表 -->
   <view class="menu-list">
     <menu-item
       wx:for="{{dishes}}"

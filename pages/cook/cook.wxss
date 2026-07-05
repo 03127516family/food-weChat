@@ -1,0 +1,100 @@
+/* 开始做饭 cook —— 专属样式（.navbar/.nav-ic/.btn/.ph/.toast 见 shared.wxss） */
+.cook {
+  min-height: 100vh;
+  background:
+    radial-gradient(880rpx 680rpx at 50% -6%, #F6E4DF 0%, transparent 60%),
+    var(--cream);
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+}
+.cook .navbar { background: transparent; }
+
+/* ---- 步骤进度 ---- */
+.ck-prog { display: flex; align-items: center; padding: 16rpx 52rpx 0; }
+.ck-prog .node {
+  width: 56rpx; height: 56rpx; border-radius: 50%; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center; font-size: 24rpx; font-weight: 700;
+  border: 3rpx solid var(--rose-300); color: var(--rose-300); background: var(--surface);
+}
+.ck-prog .node.done { background: var(--rose-500); border-color: var(--rose-500); color: #fff; }
+.ck-prog .node.cur {
+  background: var(--rose-500); border-color: var(--rose-500); color: #fff;
+  box-shadow: 0 0 0 8rpx var(--rose-100);
+}
+.ck-prog .bar { flex: 1; height: 2px; background: var(--rose-100); margin: 0 6rpx; border-radius: 2px; }
+.ck-prog .bar.done { background: var(--rose-300); }
+.ck-count { text-align: center; font-size: 26rpx; color: var(--rose-500); font-weight: 600; margin: 26rpx 0 8rpx; letter-spacing: 0.04em; }
+
+/* ---- 占位图 ---- */
+.ck-img { margin: 12rpx 44rpx 0; height: 400rpx; border-radius: 40rpx; overflow: hidden; box-shadow: var(--shadow-sm); }
+.ck-img .ph { width: 100%; height: 100%; flex-direction: column; gap: 14rpx; }
+.ck-img .ph .lbl {
+  font-size: 22rpx; letter-spacing: 0.2em; color: rgba(110, 90, 78, 0.6);
+}
+
+/* ---- 指引 ---- */
+.ck-instr { text-align: center; padding: 36rpx 52rpx 0; }
+.ck-title { font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 44rpx; line-height: 1.4; }
+.ck-title .hb { color: var(--rose-500); font-size: 32rpx; }
+.ck-hint { font-size: 26rpx; color: var(--ink-2); margin-top: 22rpx; line-height: 1.6; }
+
+/* ---- 计时 ---- */
+.ck-timer {
+  margin: 36rpx 52rpx 0; background: var(--rose-50); border: 1px solid var(--rose-100);
+  border-radius: 40rpx; padding: 40rpx; text-align: center;
+}
+.ck-timer .tval {
+  font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 104rpx;
+  color: var(--ink); letter-spacing: 0.04em; line-height: 1;
+}
+.ck-timer .tsug {
+  display: inline-flex; align-items: center; margin-top: 28rpx; background: var(--surface);
+  color: var(--rose-700); font-size: 24rpx; font-weight: 600; padding: 14rpx 32rpx;
+  border-radius: 32rpx; box-shadow: var(--shadow-sm);
+}
+
+/* ---- 控制 ---- */
+.ck-ctrl { display: flex; align-items: center; justify-content: center; gap: 68rpx; margin-top: 40rpx; }
+.ck-ctrl .cc { display: flex; flex-direction: column; align-items: center; gap: 14rpx; }
+.ck-ctrl .cc .cb {
+  width: 100rpx; height: 100rpx; border-radius: 50%; background: var(--rose-100);
+  display: flex; align-items: center; justify-content: center;
+}
+.ck-ctrl .cc.main .cb {
+  width: 136rpx; height: 136rpx; background: var(--rose-500);
+  box-shadow: 0 20rpx 44rpx rgba(195, 120, 118, 0.36);
+}
+.ck-ctrl .cc .cl { font-size: 24rpx; color: var(--ink-2); }
+
+/* ---- 小贴士 ---- */
+.ck-tip {
+  margin: 36rpx 44rpx 0; background: var(--sage-100); border-radius: 36rpx;
+  padding: 28rpx 30rpx; display: flex; gap: 22rpx; align-items: flex-start;
+}
+.ck-tip .tip-ic {
+  width: 68rpx; height: 68rpx; border-radius: 22rpx; flex: 0 0 auto; background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+}
+.ck-tip .tip-t { font-size: 26rpx; font-weight: 700; color: var(--sage-600); }
+.ck-tip .tip-d { font-size: 24rpx; color: #7C8A6F; margin-top: 8rpx; line-height: 1.55; } /* 暖橄榄绿（一次性） */
+
+/* ---- 操作 ---- */
+.ck-action { display: flex; align-items: center; gap: 28rpx; padding: 32rpx 44rpx 0; }
+.ck-action .done-btn { flex: 1; padding: 32rpx; }
+.ck-action .look { display: flex; flex-direction: column; align-items: center; gap: 8rpx; flex: 0 0 auto; color: var(--ink-2); }
+.ck-action .look .lb {
+  width: 92rpx; height: 92rpx; border-radius: 28rpx; background: var(--surface); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+}
+.ck-action .look text { font-size: 21rpx; }
+.ck-action-finish { padding-top: 0; }
+
+/* ---- 完成态 ---- */
+.ck-finish { text-align: center; padding: 90rpx 60rpx 40rpx; }
+.ck-finish .fic {
+  width: 208rpx; height: 208rpx; border-radius: 50%; margin: 0 auto 48rpx;
+  background: linear-gradient(150deg, #F0D6CF, #E7C5BD); /* 一次性玫瑰渐变 */
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 36rpx 80rpx rgba(195, 120, 118, 0.4);
+}
+.ck-finish .fh { font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 700; font-size: 48rpx; color: var(--ink); }
+.ck-finish .fp { font-size: 26rpx; color: var(--ink-2); line-height: 1.9; margin-top: 8rpx; }
